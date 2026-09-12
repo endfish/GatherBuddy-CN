@@ -6,6 +6,8 @@ description: |-
   保留 GatherBuddy 配置和 IPC 身份，不能与原版同时启用。
 punchline: 采集、钓鱼、天气与闹钟的中文助手。
 repo_url: https://github.com/endfish/GatherBuddy-CN
+icon_url: https://raw.githubusercontent.com/endfish/GatherBuddy-CN/main/images/icon.png
+changelog: 首次正式发布简体中文与国服适配版本，提供采集、钓鱼、天气、闹钟、记录与统计的中文界面；支持国服名称搜索和钓鱼消息识别，保留原有配置、命令及 IPC 身份。
 tags:
   - 采集
   - 钓鱼

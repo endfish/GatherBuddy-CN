@@ -30,9 +30,9 @@ git diff main...upstream/main -- GatherBuddy GatherBuddy.GameData .gitmodules
 
 ## 版本与交付
 
-当前基线：上游 `3.8.11.1` / `1e39592f55e57774f287bfcea87dbd651a5cf2d8`，中文测试版 `3.8.11.2`。
+当前基线：上游 `3.8.11.1` / `1e39592f55e57774f287bfcea87dbd651a5cf2d8`，中文正式版 `3.8.11.3`。
 每次升级需递增中文版本，并更新项目中的 `UpstreamVersion`／`UpstreamCommit` 元数据及说明。
 
-推送前完成 Debug、Release、语言及兼容测试，核对 ZIP 的 `GatherBuddy.dll`、`GatherBuddy.json` 和依赖。保持 `InternalName` 与所有 `GatherBuddy.*` IPC（包括上游既有拼写）不变。首次测试版不创建正式 Release，不自动更新外部分发仓库。
+推送前完成 Debug、Release、语言及兼容测试，核对 ZIP 的 `GatherBuddy.dll`、`GatherBuddy.json` 和依赖。保持 `InternalName` 与所有 `GatherBuddy.*` IPC（包括上游既有拼写）不变。正式发布由维护者明确要求后执行：从 main 构建 Release，创建版本标签与 GitHub Release，并同步 DalamudPlugins 的 `GatherBuddy-CN/latest.zip` 和 `repo.json` 条目；普通源码维护不自动触发发布。
 
 仓库不得包含个人配置、客户端数据、凭据、机器路径、临时调研材料或本机协作提示词。

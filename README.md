@@ -2,7 +2,7 @@
 
 面向国服的 GatherBuddy 简体中文分支，由 Endfish 独立维护，持续同步 [Ottermandias/GatherBuddy](https://github.com/Ottermandias/GatherBuddy)。
 
-当前测试版本 **3.8.11.2**，基于上游 **3.8.11.1 / [1e39592](https://github.com/Ottermandias/GatherBuddy/commit/1e39592f55e57774f287bfcea87dbd651a5cf2d8)**，使用 .NET 10、Dalamud API 15。
+当前正式版本 **3.8.11.3**，基于上游 **3.8.11.1 / [1e39592](https://github.com/Ottermandias/GatherBuddy/commit/1e39592f55e57774f287bfcea87dbd651a5cf2d8)**，使用 .NET 10、Dalamud API 15。
 
 ## 功能
 
@@ -14,14 +14,17 @@
 
 本轮保持上游功能范围。底层日志、命令参数、协议标识和用户自定义内容保持原样。
 
-## 安装本地测试版
+## 安装与更新
 
-首轮只提供源码与本地测试包，完成游戏内验收后再接入分发仓库。
+正式版本通过 Endfish 的 Dalamud 自定义插件源分发，也可在本仓库的 [Releases](https://github.com/endfish/GatherBuddy-CN/releases) 下载。
 
 1. 在插件列表中停用原版 GatherBuddy。
-2. 将测试 ZIP 的所有文件解压至一个独立目录，保留 DLL 之间的相对位置。
-3. 打开 `/xlsettings` → `Experimental`，将解压目录中的 `GatherBuddy.dll` 添加为开发插件。
-4. 在 `/xlplugins` 的开发插件列表中启用 GatherBuddy-CN，输入 `/gatherbuddy` 打开界面。
+2. 打开 `/xlsettings` → `Experimental`，在自定义插件仓库中添加：
+   `https://raw.githubusercontent.com/endfish/DalamudPlugins/main/repo.json`
+3. 保存设置，在 `/xlplugins` 中搜索并安装 GatherBuddy-CN。已添加该插件源的用户可直接刷新插件列表。
+4. 输入 `/gatherbuddy` 打开界面；后续更新通过同一插件源提供。
+
+从本地测试版切换时，先停用该开发插件并移除其开发 DLL 路径，再安装正式版。
 
 显示名为 GatherBuddy-CN，`InternalName`、程序集及配置身份仍为 `GatherBuddy`。因此**中文版与原版不能同时启用**，两者会使用同一套既有配置。测试前可备份 GatherBuddy 配置和记录。
 
