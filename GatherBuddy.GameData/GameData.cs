@@ -155,10 +155,10 @@ public class GameData
 
             var catchData = DataManager.GetExcelSheet<FishingNoteInfo>();
             Fishes = DataManager.GetExcelSheet<FishParameter>()
-                .Where(f => f.Item.RowId != 0 && f.Item.RowId < 1000000)
+                .Where(f => f.Item.RowId != 0 && f.Item.RowId < 1000000 && f.Item.TryGetValue<Item>(out var item) && !item.Name.IsEmpty)
                 .Select(f => new Fish(DataManager, f, catchData))
                 .Concat(DataManager.GetExcelSheet<SpearfishingItem>()
-                    .Where(sf => sf.Item.RowId != 0 && sf.Item.RowId < 1000000)
+                    .Where(sf => sf.Item.RowId != 0 && sf.Item.RowId < 1000000 && sf.Item.TryGetValue(out var item) && !item.Name.IsEmpty)
                     .Select(sf => new Fish(DataManager, sf, catchData)))
                 .GroupBy(f => f.ItemId)
                 .Select(group => group.First())

@@ -1,4 +1,4 @@
-﻿using Dalamud.Game;
+using Dalamud.Game;
 using GatherBuddy.Classes;
 using System.Collections.Frozen;
 using System.Collections.Generic;
@@ -16,11 +16,15 @@ public class Identificator
     private readonly FrozenDictionary<string, Fish>[]       _fishFromLanguage;
 
     public Identificator()
+        : this(GatherBuddy.GameData, GatherBuddy.Language)
+    { }
+
+    public Identificator(GameData data, ClientLanguage language)
     {
-        _data = GatherBuddy.GameData;
+        _data = data;
         var languages = new[]
         {
-            GatherBuddy.Language,
+            language,
             MultiString.ChineseLanguage,
             ClientLanguage.English,
             ClientLanguage.Japanese,
