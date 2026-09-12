@@ -1,4 +1,4 @@
-﻿using Dalamud.Interface.Textures;
+using Dalamud.Interface.Textures;
 using Dalamud.Interface.Utility;
 using GatherBuddy.Classes;
 using GatherBuddy.Config;
@@ -257,7 +257,7 @@ public partial class FishTimerWindow
                 : NextUptime.Start > GatherBuddy.Time.ServerTime
                     ? TimeInterval.DurationString(NextUptime.Start, GatherBuddy.Time.ServerTime, true)
                     : NextUptime.End < GatherBuddy.Time.ServerTime
-                        ? "(ended)"
+                        ? Localize.Text("(ended)")
                         : TimeInterval.DurationString(NextUptime.End, GatherBuddy.Time.ServerTime, true);
             var textWidth = timeString is null ? 0 : ImUtf8.CalcTextSize(timeString).X;
 
@@ -326,16 +326,16 @@ public partial class FishTimerWindow
                         if (_fish.MutliHookUpper == _fish.MultiHookLower)
                         {
                             ImUtf8.Text(
-                                $"Double Hook for {_fish.MultiHookLower} fish{(_fish.Points > 0 ? $" worth {_fish.Points * _fish.MultiHookLower} points" : "")}");
+                                Localize.Format("Double Hook for {0} fish{1}", _fish.MultiHookLower, (_fish.Points > 0 ? Localize.Format(" worth {0} points", _fish.Points * _fish.MultiHookLower) : "")));
                             ImUtf8.Text(
-                                $"Triple Hook for {TripleHookCount(_fish.MultiHookLower)} fish{(_fish.Points > 0 ? $" worth {_fish.Points * TripleHookCount(_fish.MultiHookLower)} points" : "")}");
+                                Localize.Format("Triple Hook for {0} fish{1}", TripleHookCount(_fish.MultiHookLower), (_fish.Points > 0 ? Localize.Format(" worth {0} points", _fish.Points * TripleHookCount(_fish.MultiHookLower)) : "")));
                         }
                         else
                         {
-                            ImUtf8.Text($"Double Hook for {_fish.MultiHookLower}-{_fish.MutliHookUpper} fish"
-                              + $"{(_fish.Points > 0 ? $" worth between {_fish.Points * _fish.MultiHookLower} and {_fish.Points * _fish.MutliHookUpper} points" : "")}");
-                            ImUtf8.Text($"Triple Hook for {TripleHookCount(_fish.MultiHookLower)}-{TripleHookCount(_fish.MutliHookUpper)} fish"
-                              + $"{(_fish.Points > 0 ? $" worth between {_fish.Points * TripleHookCount(_fish.MultiHookLower)} and {_fish.Points * TripleHookCount(_fish.MutliHookUpper)} points" : "")}");
+                            ImUtf8.Text(Localize.Format("Double Hook for {0}-{1} fish", _fish.MultiHookLower, _fish.MutliHookUpper)
+                              + $"{(_fish.Points > 0 ? Localize.Format(" worth between {0} and {1} points", _fish.Points * _fish.MultiHookLower, _fish.Points * _fish.MutliHookUpper) : "")}");
+                            ImUtf8.Text(Localize.Format("Triple Hook for {0}-{1} fish", TripleHookCount(_fish.MultiHookLower), TripleHookCount(_fish.MutliHookUpper))
+                              + $"{(_fish.Points > 0 ? Localize.Format(" worth between {0} and {1} points", _fish.Points * TripleHookCount(_fish.MultiHookLower), _fish.Points * TripleHookCount(_fish.MutliHookUpper)) : "")}");
                         }
 
                         window._style.Pop();
@@ -376,7 +376,7 @@ public partial class FishTimerWindow
                         using var tooltip = ImRaii.Tooltip();
                         window._style.Push(ImGuiStyleVar.ItemSpacing, window._originalSpacing);
 
-                        ImUtf8.Text($"This fish is a {_fish.OceanSpecies.ToString().ToLower()}");
+                        ImUtf8.Text(Localize.Format("This fish is a {0}", Localize.Display(_fish.OceanSpecies).ToLower()));
 
                         window._style.Pop();
                     }

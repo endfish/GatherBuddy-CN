@@ -23,7 +23,7 @@ namespace GatherBuddy.Gui;
 
 public partial class Interface
 {
-    private sealed class RecordTable : Table<FishRecord>
+    private sealed class RecordTable : CnTable<FishRecord>
     {
         public const string FileNamePopup = "FileNamePopup";
 
@@ -38,6 +38,7 @@ public partial class Interface
 
         protected override void PreDraw()
         {
+            base.PreDraw();
             ExtraHeight = ImGui.GetFrameHeightWithSpacing() / ImGuiHelpers.GlobalScale;
             if (_deleteIdx > -1)
             {
@@ -52,24 +53,24 @@ public partial class Interface
             }
         }
 
-        private static readonly ContentIdHeader  _contentIdHeader  = new() { Label = "Content ID" };
-        private static readonly BaitHeader       _baitHeader       = new() { Label = "Bait" };
-        private static readonly SpotHeader       _spotHeader       = new() { Label = "Fishing Spot" };
-        private static readonly CatchHeader      _catchHeader      = new() { Label = "Caught Fish" };
-        private static readonly CastStartHeader  _castStartHeader  = new() { Label = "TimeStamp" };
-        private static readonly BiteTypeHeader   _biteTypeHeader   = new() { Label = "Tug" };
-        private static readonly HookHeader       _hookHeader       = new() { Label = "Hookset" };
-        private static readonly DurationHeader   _durationHeader   = new() { Label = "Bite" };
-        private static readonly GatheringHeader  _gatheringHeader  = new() { Label = "Gath." };
-        private static readonly PerceptionHeader _perceptionHeader = new() { Label = "Perc." };
-        private static readonly AmountHeader     _amountHeader     = new() { Label = "Amt" };
-        private static readonly SizeHeader       _sizeHeader       = new() { Label = "Ilm" };
-        private static readonly FlagHeader       _flagHeader       = new() { Label = "Flags" };
+        private static readonly ContentIdHeader  _contentIdHeader  = new() { Label = Localize.Text("Content ID") };
+        private static readonly BaitHeader       _baitHeader       = new() { Label = Localize.Text("Bait") };
+        private static readonly SpotHeader       _spotHeader       = new() { Label = Localize.Text("Fishing Spot") };
+        private static readonly CatchHeader      _catchHeader      = new() { Label = Localize.Text("Caught Fish") };
+        private static readonly CastStartHeader  _castStartHeader  = new() { Label = Localize.Text("TimeStamp") };
+        private static readonly BiteTypeHeader   _biteTypeHeader   = new() { Label = Localize.Text("Tug") };
+        private static readonly HookHeader       _hookHeader       = new() { Label = Localize.Text("Hookset") };
+        private static readonly DurationHeader   _durationHeader   = new() { Label = Localize.Text("Bite") };
+        private static readonly GatheringHeader  _gatheringHeader  = new() { Label = Localize.Text("Gath.") };
+        private static readonly PerceptionHeader _perceptionHeader = new() { Label = Localize.Text("Perc.") };
+        private static readonly AmountHeader     _amountHeader     = new() { Label = Localize.Text("Amt") };
+        private static readonly SizeHeader       _sizeHeader       = new() { Label = Localize.Text("Ilm") };
+        private static readonly FlagHeader       _flagHeader       = new() { Label = Localize.Text("Flags") };
 
         private sealed class GatheringHeader : ColumnString<FishRecord>
         {
             public override string ToName(FishRecord record)
-                => record.Gathering.ToString();
+                => Localize.Display(record.Gathering);
 
             public override float Width
                 => 50 * ImGuiHelpers.GlobalScale;
@@ -84,7 +85,7 @@ public partial class Interface
         private sealed class PerceptionHeader : ColumnString<FishRecord>
         {
             public override string ToName(FishRecord record)
-                => record.Perception.ToString();
+                => Localize.Display(record.Perception);
 
             public override float Width
                 => 50 * ImGuiHelpers.GlobalScale;
@@ -99,7 +100,7 @@ public partial class Interface
         private sealed class AmountHeader : ColumnString<FishRecord>
         {
             public override string ToName(FishRecord record)
-                => record.Amount.ToString();
+                => Localize.Display(record.Amount);
 
             public override float Width
                 => 35 * ImGuiHelpers.GlobalScale;
@@ -128,9 +129,9 @@ public partial class Interface
             {
                 var tt = string.Empty;
                 if (record.Flags.HasFlag(FishRecord.Effects.Large))
-                    tt = "Large Catch!";
+                    tt = Localize.Text("Large Catch!");
                 if (record.Flags.HasFlag(FishRecord.Effects.Collectible))
-                    tt += tt.Length > 0 ? "\nCollectible!" : "Collectible!";
+                    tt += tt.Length > 0 ? Localize.Text("\nCollectible!") : Localize.Text("Collectible!");
                 using var color = ImRaii.PushColor(ImGuiCol.Text, ColorId.DisabledText.Value(), tt.Length == 0);
                 ImGuiUtil.RightAlign(ToName(record));
                 ImGuiUtil.HoverTooltip(tt);
@@ -141,7 +142,7 @@ public partial class Interface
         private sealed class ContentIdHeader : ColumnString<FishRecord>
         {
             public override string ToName(FishRecord item)
-                => item.Flags.HasFlag(FishRecord.Effects.Legacy) ? "Legacy" : item.ContentIdHash.ToString("X8");
+                => item.Flags.HasFlag(FishRecord.Effects.Legacy) ? Localize.Text("Legacy") : item.ContentIdHash.ToString("X8");
 
             public override float Width
                 => 75 * ImGuiHelpers.GlobalScale;
@@ -162,7 +163,7 @@ public partial class Interface
         private sealed class SpotHeader : ColumnString<FishRecord>
         {
             public override string ToName(FishRecord item)
-                => item.FishingSpot?.Name ?? "Unknown";
+                => item.FishingSpot?.Name ?? Localize.Text("Unknown");
 
             public override float Width
                 => 200 * ImGuiHelpers.GlobalScale;
@@ -177,7 +178,7 @@ public partial class Interface
             }
 
             public override string ToName(FishRecord record)
-                => record.Catch?.Name[GatherBuddy.Language] ?? "None";
+                => record.Catch?.Name[GatherBuddy.Language] ?? Localize.Text("None");
 
             public override float Width
                 => 200 * ImGuiHelpers.GlobalScale;
@@ -187,7 +188,7 @@ public partial class Interface
                 base.DrawColumn(record, idx);
                 if (ImGui.GetIO().KeyCtrl && ImGui.IsItemClicked(ImGuiMouseButton.Right))
                     _deleteIdx = idx;
-                ImGuiUtil.HoverTooltip("Hold Control and right-click to delete...");
+                ImGuiUtil.HoverTooltip(Localize.Text("Hold Control and right-click to delete..."));
             }
         }
 
@@ -196,7 +197,7 @@ public partial class Interface
             public override string ToName(FishRecord record)
             {
                 if (!GatherBuddy.Config.UseUnixTimeFishRecords)
-                    return (record.TimeStamp.Time / 1000).ToString();
+                    return Localize.Display((record.TimeStamp.Time / 1000));
 
                 var dateTime = DateTimeOffset.FromUnixTimeMilliseconds(record.TimeStamp.Time).ToLocalTime();
                 return dateTime.ToString("g");
@@ -216,7 +217,7 @@ public partial class Interface
                     using var tt = ImUtf8.Tooltip();
                     ImUtf8.Text($"{record.TimeStamp}");
                     var et = record.TimeStamp.ConvertToEorzea().RoundToSecond();
-                    ImUtf8.Text($"{et.CurrentHour:D2}:{et.CurrentMinute:D2}:{et.CurrentSecond:D2} ET");
+                    ImUtf8.Text(Localize.Format("{0:D2}:{1:D2}:{2:D2} ET", et.CurrentHour, et.CurrentMinute, et.CurrentSecond));
                 }
             }
         }
@@ -243,7 +244,7 @@ public partial class Interface
                 => lhs.Tug.CompareTo(rhs.Tug);
 
             public override void DrawColumn(FishRecord item, int idx)
-                => ImGui.Text(item.Tug.ToString());
+                => ImGui.Text(Localize.Display(item.Tug));
 
             private TugTypeFilter _filter;
 
@@ -411,20 +412,20 @@ public partial class Interface
 
             private static readonly string[] _names =
             [
-                "Large Catch",
-                "Collectible",
-                "Patience",
-                "Patience II",
-                "Intuition",
-                "Snagging",
-                "Fish Eyes",
-                "Chum",
-                "Prize Catch",
-                "Identical Cast",
-                "Surface Slap",
-                "Big Game Fishing",
-                "Ambitious Lure",
-                "Modest Lure",
+                Localize.Text("Large Catch"),
+                Localize.Text("Collectible"),
+                Localize.Text("Patience"),
+                Localize.Text("Patience II"),
+                Localize.Text("Intuition"),
+                Localize.Text("Snagging"),
+                Localize.Text("Fish Eyes"),
+                Localize.Text("Chum"),
+                Localize.Text("Prize Catch"),
+                Localize.Text("Identical Cast"),
+                Localize.Text("Surface Slap"),
+                Localize.Text("Big Game Fishing"),
+                Localize.Text("Ambitious Lure"),
+                Localize.Text("Modest Lure"),
             ];
 
             protected override IReadOnlyList<(ColumnEffects On, ColumnEffects Off)> Values
@@ -508,7 +509,7 @@ public partial class Interface
                 => _filter;
 
             private void DrawIcon(FishRecord item, ISharedImmediateTexture icon, FishRecord.Effects flag)
-                => DrawIcon(icon, item.Flags.HasFlag(flag), flag.ToString());
+                => DrawIcon(icon, item.Flags.HasFlag(flag), Localize.Display(flag));
 
             private void DrawIcon(ISharedImmediateTexture icon, bool enabled, string tooltip)
             {
@@ -541,24 +542,24 @@ public partial class Interface
                 switch (item.Flags.AmbitiousLure())
                 {
                     case 0:
-                        DrawIcon(Icons.DefaultStorage.TextureProvider.GetFromGameIcon(218905), false, "Ambitious Lure");
+                        DrawIcon(Icons.DefaultStorage.TextureProvider.GetFromGameIcon(218905), false, Localize.Text("Ambitious Lure"));
                         ImGui.SameLine();
                         switch (item.Flags.ModestLure())
                         {
-                            case 0: DrawIcon(Icons.DefaultStorage.TextureProvider.GetFromGameIcon(218909), false, "Modest Lure"); break;
-                            case 1: DrawIcon(Icons.DefaultStorage.TextureProvider.GetFromGameIcon(218909), true,  "Modest Lure"); break;
-                            case 2: DrawIcon(Icons.DefaultStorage.TextureProvider.GetFromGameIcon(218910), true,  "Modest Lure"); break;
-                            case 3: DrawIcon(Icons.DefaultStorage.TextureProvider.GetFromGameIcon(218911), true,  "Modest Lure"); break;
+                            case 0: DrawIcon(Icons.DefaultStorage.TextureProvider.GetFromGameIcon(218909), false, Localize.Text("Modest Lure")); break;
+                            case 1: DrawIcon(Icons.DefaultStorage.TextureProvider.GetFromGameIcon(218909), true,  Localize.Text("Modest Lure")); break;
+                            case 2: DrawIcon(Icons.DefaultStorage.TextureProvider.GetFromGameIcon(218910), true,  Localize.Text("Modest Lure")); break;
+                            case 3: DrawIcon(Icons.DefaultStorage.TextureProvider.GetFromGameIcon(218911), true,  Localize.Text("Modest Lure")); break;
                         }
 
                         return;
-                    case 1: DrawIcon(Icons.DefaultStorage.TextureProvider.GetFromGameIcon(218905), true, "Ambitious Lure"); break;
-                    case 2: DrawIcon(Icons.DefaultStorage.TextureProvider.GetFromGameIcon(218906), true, "Ambitious Lure"); break;
-                    case 3: DrawIcon(Icons.DefaultStorage.TextureProvider.GetFromGameIcon(218907), true, "Ambitious Lure"); break;
+                    case 1: DrawIcon(Icons.DefaultStorage.TextureProvider.GetFromGameIcon(218905), true, Localize.Text("Ambitious Lure")); break;
+                    case 2: DrawIcon(Icons.DefaultStorage.TextureProvider.GetFromGameIcon(218906), true, Localize.Text("Ambitious Lure")); break;
+                    case 3: DrawIcon(Icons.DefaultStorage.TextureProvider.GetFromGameIcon(218907), true, Localize.Text("Ambitious Lure")); break;
                 }
 
                 ImGui.SameLine();
-                DrawIcon(Icons.DefaultStorage.TextureProvider.GetFromGameIcon(218909), false, "Modest Lure");
+                DrawIcon(Icons.DefaultStorage.TextureProvider.GetFromGameIcon(218909), false, Localize.Text("Modest Lure"));
             }
         }
 
@@ -624,9 +625,8 @@ public partial class Interface
     private void DrawRecordTab()
     {
         using var id  = ImUtf8.PushId("Fish Records"u8);
-        using var tab = ImUtf8.TabItem("Fish Records"u8);
-        ImUtf8.HoverTooltip("The records of my fishing prowess have been greatly exaggerated.\n"u8
-          + "Find, cleanup and share all data you have collected while fishing."u8);
+        using var tab = ImUtf8.TabItem(Localize.Label("Fish Records"));
+        ImUtf8.HoverTooltip(Localize.Text("The records of my fishing prowess have been greatly exaggerated.\nFind, cleanup and share all data you have collected while fishing."));
         if (!tab)
             return;
 
@@ -639,23 +639,20 @@ public partial class Interface
         else
             ImGuiUtil.DrawTextButton($"{_recordTable.CurrentItems}", textSize, ImGui.GetColorU32(ImGuiCol.Button));
         ImGui.SameLine();
-        if (ImUtf8.Button("Cleanup"u8))
+        if (ImUtf8.Button(Localize.Label("Cleanup")))
         {
             _plugin.FishRecorder.RemoveDuplicates();
             _plugin.FishRecorder.RemoveInvalid();
         }
 
-        ImUtf8.HoverTooltip("Delete all entries that were marked as invalid for some reason,\n"u8
-          + "as well as all entries that have a duplicate (with the same content id and timestamp).\n"u8
-          + "Usually, there should be none such entries.\n"u8
-          + "Use at your own risk, no backup will be created automatically."u8);
+        ImUtf8.HoverTooltip(Localize.Text("Delete all entries that were marked as invalid for some reason,\nas well as all entries that have a duplicate (with the same content id and timestamp).\nUsually, there should be none such entries.\nUse at your own risk, no backup will be created automatically."));
 
         ImGui.SameLine();
         try
         {
-            if (ImUtf8.Button("Copy to Clipboard"u8))
+            if (ImUtf8.Button(Localize.Label("Copy to Clipboard")))
                 ImGui.SetClipboardText(_plugin.FishRecorder.ExportBase64());
-            ImUtf8.HoverTooltip("Export all fish records to your clipboard, to share them with other people. This may be a lot"u8);
+            ImUtf8.HoverTooltip(Localize.Text("Export all fish records to your clipboard, to share them with other people. This may be a lot"));
         }
         catch
         {
@@ -665,9 +662,9 @@ public partial class Interface
         ImGui.SameLine();
         try
         {
-            if (ImUtf8.Button("Import from Clipboard"u8))
+            if (ImUtf8.Button(Localize.Label("Import from Clipboard")))
                 _plugin.FishRecorder.ImportBase64(ImGui.GetClipboardText());
-            ImUtf8.HoverTooltip("Import a set of fish records shared with you from your clipboard. Should automatically skip duplicates."u8);
+            ImUtf8.HoverTooltip(Localize.Text("Import a set of fish records shared with you from your clipboard. Should automatically skip duplicates."));
         }
         catch
         {
@@ -677,13 +674,13 @@ public partial class Interface
         ImGui.SameLine();
         try
         {
-            if (ImUtf8.Button("Export JSON"u8))
+            if (ImUtf8.Button(Localize.Label("Export JSON")))
             {
                 ImGui.OpenPopup(RecordTable.FileNamePopup);
                 WriteJson = true;
             }
 
-            ImUtf8.HoverTooltip("Given a path, export all records as a single JSON file."u8);
+            ImUtf8.HoverTooltip(Localize.Text("Given a path, export all records as a single JSON file."));
         }
         catch
         {
@@ -693,13 +690,13 @@ public partial class Interface
         ImGui.SameLine();
         try
         {
-            if (ImUtf8.Button("Export TSV"u8))
+            if (ImUtf8.Button(Localize.Label("Export TSV")))
             {
                 ImGui.OpenPopup(RecordTable.FileNamePopup);
                 WriteTsv = true;
             }
 
-            ImUtf8.HoverTooltip("Given a path, export all records as a single TSV file."u8);
+            ImUtf8.HoverTooltip(Localize.Text("Given a path, export all records as a single TSV file."));
         }
         catch
         {
@@ -709,11 +706,11 @@ public partial class Interface
         ImGui.SameLine();
         try
         {
-            if (ImUtf8.Button("Copy Caught Fish JSON"u8))
+            if (ImUtf8.Button(Localize.Label("Copy Caught Fish JSON")))
             {
                 var logFish = GatherBuddy.GameData.Fishes.Values.Where(f => f.InLog && f.FishingSpots.Count > 0).ToArray();
                 var ids     = logFish.Where(f => GatherBuddy.FishLog.IsUnlocked(f)).Select(f => f.ItemId).ToArray();
-                Communicator.PrintClipboardMessage("List of ", $"{ids.Length}/{logFish.Length} caught fish ");
+                Communicator.PrintClipboardMessage(Localize.Text("List of "), Localize.Format("{0}/{1} caught fish ", ids.Length, logFish.Length));
                 ImGui.SetClipboardText(JsonConvert.SerializeObject(ids, Formatting.Indented));
             }
         }
@@ -723,7 +720,7 @@ public partial class Interface
         }
 
         var name = string.Empty;
-        if (!ImGuiUtil.OpenNameField(RecordTable.FileNamePopup, ref name) || name.Length <= 0)
+        if (!CnWidget.OpenNameField(RecordTable.FileNamePopup, ref name) || name.Length <= 0)
             return;
 
         if (WriteJson)

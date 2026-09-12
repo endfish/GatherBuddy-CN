@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -20,7 +20,7 @@ namespace GatherBuddy.Gui;
 
 public partial class Interface
 {
-    private const string AutomaticallyGenerated = "Automatically generated from context menu.";
+    private static readonly string AutomaticallyGenerated = Localize.Text("Automatically generated from context menu.");
 
     private void DrawAddAlarm(IGatherable item)
     {
@@ -29,7 +29,7 @@ public partial class Interface
             return;
 
         var current = _alarmCache.Selector.EnsureCurrent();
-        if (ImGui.Selectable("Add to Alarm Preset"))
+        if (ImGui.Selectable(Localize.Label("Add to Alarm Preset")))
         {
             if (current == null)
             {
@@ -49,14 +49,14 @@ public partial class Interface
 
         if (ImGui.IsItemHovered())
             ImGui.SetTooltip(
-                $"Add {item.Name[GatherBuddy.Language]} to {(current == null ? "a new alarm preset." : CheckUnnamed(current.Name))}");
+                Localize.Format("Add {0} to {1}", item.Name[GatherBuddy.Language], (current == null ? Localize.Text("a new alarm preset.") : CheckUnnamed(current.Name))));
     }
 
     private void DrawAddToGatherGroup(IGatherable item)
     {
         var       current = _gatherGroupCache.Selector.EnsureCurrent();
         using var color   = ImRaii.PushColor(ImGuiCol.Text, ColorId.DisabledText.Value(), current == null);
-        if (ImGui.Selectable("Add to Gather Group") && current != null)
+        if (ImGui.Selectable(Localize.Label("Add to Gather Group")) && current != null)
             if (_plugin.GatherGroupManager.ChangeGroupNode(current, current.Nodes.Count, item, null, null, null, false))
                 _plugin.GatherGroupManager.Save();
 
@@ -64,15 +64,15 @@ public partial class Interface
 
         if (ImGui.IsItemHovered())
             ImGui.SetTooltip(current == null
-                ? "Requires a Gather Group to be setup and selected."
-                : $"Add {item.Name[GatherBuddy.Language]} to {current.Name}");
+                ? Localize.Text("Requires a Gather Group to be setup and selected.")
+                : Localize.Format("Add {0} to {1}", item.Name[GatherBuddy.Language], current.Name));
     }
 
     private void DrawAddGatherWindow(IGatherable item)
     {
         var current = _gatherWindowCache.Selector.EnsureCurrent();
 
-        if (ImGui.Selectable("Add to Gather Window Preset"))
+        if (ImGui.Selectable(Localize.Label("Add to Gather Window Preset")))
         {
             if (current == null)
                 _plugin.GatherWindowManager.AddPreset(new GatherWindowPreset
@@ -87,7 +87,7 @@ public partial class Interface
 
         if (ImGui.IsItemHovered())
             ImGui.SetTooltip(
-                $"Add {item.Name[GatherBuddy.Language]} to {(current == null ? "a new gather window preset." : CheckUnnamed(current.Name))}");
+                Localize.Format("Add {0} to {1}", item.Name[GatherBuddy.Language], (current == null ? Localize.Text("a new gather window preset.") : CheckUnnamed(current.Name))));
     }
 
     private static string TeamCraftAddressEnd(string type, uint id)
@@ -117,7 +117,7 @@ public partial class Interface
         if (itemId == 0)
             return;
 
-        if (!ImGui.Selectable("Open in GarlandTools"))
+        if (!ImGui.Selectable(Localize.Label("Open in GarlandTools")))
             return;
 
         try
@@ -135,11 +135,11 @@ public partial class Interface
         if (itemId == 0)
             return;
 
-        if (ImGui.Selectable("Open in TeamCraft (Browser)"))
-            OpenInTeamCraftWeb(TeamCraftAddressEnd("item", itemId));
+        if (ImGui.Selectable(Localize.Label("Open in TeamCraft (Browser)")))
+            OpenInTeamCraftWeb(TeamCraftAddressEnd(Localize.Text("item"), itemId));
 
-        if (ImGui.Selectable("Open in TeamCraft (App)"))
-            OpenInTeamCraftLocal(TeamCraftAddressEnd("item", itemId));
+        if (ImGui.Selectable(Localize.Label("Open in TeamCraft (App)")))
+            OpenInTeamCraftLocal(TeamCraftAddressEnd(Localize.Text("item"), itemId));
     }
 
     private static void OpenInTeamCraftWeb(string addressEnd)
@@ -182,10 +182,10 @@ public partial class Interface
         if (fs.Id == 0)
             return;
 
-        if (ImGui.Selectable("Open in TeamCraft (Browser)"))
+        if (ImGui.Selectable(Localize.Label("Open in TeamCraft (Browser)")))
             OpenInTeamCraftWeb(TeamCraftAddressEnd(fs));
 
-        if (ImGui.Selectable("Open in TeamCraft (App)"))
+        if (ImGui.Selectable(Localize.Label("Open in TeamCraft (App)")))
             OpenInTeamCraftLocal(TeamCraftAddressEnd(fs));
     }
 
@@ -201,7 +201,7 @@ public partial class Interface
         DrawAddAlarm(item);
         DrawAddToGatherGroup(item);
         DrawAddGatherWindow(item);
-        if (ImGui.Selectable("Create Link"))
+        if (ImGui.Selectable(Localize.Label("Create Link")))
             Communicator.Print(SeString.CreateItemLink(item.ItemId));
         DrawOpenInGarlandTools(item.ItemId);
         DrawOpenInTeamCraft(item.ItemId);
@@ -216,7 +216,7 @@ public partial class Interface
         if (!popup)
             return;
 
-        if (ImGui.Selectable("Create Link"))
+        if (ImGui.Selectable(Localize.Label("Create Link")))
             Communicator.Print(SeString.CreateItemLink(item.ItemId));
         DrawOpenInGarlandTools(item.ItemId);
         DrawOpenInTeamCraft(item.ItemId);
@@ -234,7 +234,7 @@ public partial class Interface
         if (!popup)
             return;
 
-        if (ImGui.Selectable("Create Link"))
+        if (ImGui.Selectable(Localize.Label("Create Link")))
             Communicator.Print(SeString.CreateItemLink(bait.Id));
         DrawOpenInGarlandTools(bait.Id);
         DrawOpenInTeamCraft(bait.Id);

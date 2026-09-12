@@ -24,7 +24,7 @@ public class CnColumnFlags<T, TItem> : Column<TItem> where T : struct, Enum
         => Enum.GetValues<T>();
 
     protected virtual string[] Names
-        => Enum.GetNames<T>();
+        => Localize.EnumNames<T>();
 
     public virtual T FilterValue
         => default;
@@ -54,7 +54,7 @@ public class CnColumnFlags<T, TItem> : Column<TItem> where T : struct, Enum
         }
 
         if (!all)
-            ImUtf8.HoverTooltip("Right-click to clear filters."u8);
+            ImUtf8.HoverTooltip(Localize.Text("Right-click to clear filters."));
 
         if (!combo)
             return false;
@@ -62,7 +62,7 @@ public class CnColumnFlags<T, TItem> : Column<TItem> where T : struct, Enum
         color.Pop();
 
         var ret = false;
-        if (ImUtf8.Checkbox("Enable All"u8, ref all))
+        if (ImUtf8.Checkbox(Localize.Label("Enable All"), ref all))
         {
             SetValue(AllFlags, all);
             ret = true;
@@ -128,7 +128,7 @@ public abstract class CnTriStateColumnFlags<T, TItem> : Column<TItem> where T : 
         }
 
         if (!all && ImGui.IsItemHovered())
-            ImUtf8.HoverTooltip("Right-click to clear filters."u8);
+            ImUtf8.HoverTooltip(Localize.Text("Right-click to clear filters."));
 
         if (!combo)
             return false;

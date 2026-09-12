@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -119,10 +119,10 @@ public partial class GatherWindowManager : IDisposable
             {
                 Dalamud.Notifications.AddNotification(new Notification()
                 {
-                    Title = "GatherBuddy Error",
+                    Title = Localize.Text("GatherBuddy Error"),
                     Content =
-                        "Failed to load some gather window presets. See the plugin log for more details. This is not saved, if it keeps happening you need to manually change a preset to cause a save.",
-                    MinimizedText = "Failed to load gather window presets.",
+                        Localize.Text("Failed to load some gather window presets. See the plugin log for more details. This is not saved, if it keeps happening you need to manually change a preset to cause a save."),
+                    MinimizedText = Localize.Text("Failed to load gather window presets."),
                     Type          = NotificationType.Error,
                 });
             }

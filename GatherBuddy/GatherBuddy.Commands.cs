@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using Dalamud.Game.Command;
 using Dalamud.Game.Text.SeStringHandling;
@@ -29,47 +29,46 @@ public partial class GatherBuddy
     {
         _commands["/gatherbuddy"] = new CommandInfo(OnGatherBuddy)
         {
-            HelpMessage = "Use to open the GatherBuddy interface.",
+            HelpMessage = Localize.Text("Use to open the GatherBuddy interface."),
             ShowInHelp  = true,
         };
 
         _commands["/gather"] = new CommandInfo(OnGather)
         {
-            HelpMessage = "Mark the nearest node containing the item supplied, teleport to the nearest aetheryte, equip appropriate gear.\n"
-              + "You can use 'alarm' to gather the last triggered alarm or 'next' to gather the same item as before, but in the next-best location.",
+            HelpMessage = Localize.Text("Mark the nearest node containing the item supplied, teleport to the nearest aetheryte, equip appropriate gear.\nYou can use 'alarm' to gather the last triggered alarm or 'next' to gather the same item as before, but in the next-best location."),
             ShowInHelp = true,
         };
 
         _commands["/gatherbtn"] = new CommandInfo(OnGatherBtn)
         {
             HelpMessage =
-                "Mark the nearest botanist node containing the item supplied, teleport to the nearest aetheryte, equip appropriate gear.",
+                Localize.Text("Mark the nearest botanist node containing the item supplied, teleport to the nearest aetheryte, equip appropriate gear."),
             ShowInHelp = true,
         };
 
         _commands["/gathermin"] = new CommandInfo(OnGatherMin)
         {
             HelpMessage =
-                "Mark the nearest miner node containing the item supplied, teleport to the nearest aetheryte, equip appropriate gear.",
+                Localize.Text("Mark the nearest miner node containing the item supplied, teleport to the nearest aetheryte, equip appropriate gear."),
             ShowInHelp = true,
         };
 
         _commands["/gatherfish"] = new CommandInfo(OnGatherFish)
         {
             HelpMessage =
-                "Mark the nearest fishing spot containing the fish supplied, teleport to the nearest aetheryte and equip fishing gear.",
+                Localize.Text("Mark the nearest fishing spot containing the fish supplied, teleport to the nearest aetheryte and equip fishing gear."),
             ShowInHelp = true,
         };
 
         _commands["/gathergroup"] = new CommandInfo(OnGatherGroup)
         {
-            HelpMessage = "Teleport to the node of a group corresponding to current time. Use /gathergroup for more details.",
+            HelpMessage = Localize.Text("Teleport to the node of a group corresponding to current time. Use /gathergroup for more details."),
             ShowInHelp  = true,
         };
 
         _commands["/gbc"] = new CommandInfo(OnGatherBuddyShort)
         {
-            HelpMessage = "Some quick toggles for config options. Use without argument for help.",
+            HelpMessage = Localize.Text("Some quick toggles for config options. Use without argument for help."),
             ShowInHelp  = true,
         };
 
@@ -97,7 +96,7 @@ public partial class GatherBuddy
     private void OnGather(string command, string arguments)
     {
         if (arguments.Length == 0)
-            Communicator.NoItemName(command, "item");
+            Communicator.NoItemName(command, Localize.Text("item"));
         else
             Executor.GatherItemByName(arguments);
     }
@@ -105,7 +104,7 @@ public partial class GatherBuddy
     private void OnGatherBtn(string command, string arguments)
     {
         if (arguments.Length == 0)
-            Communicator.NoItemName(command, "item");
+            Communicator.NoItemName(command, Localize.Text("item"));
         else
             Executor.GatherItemByName(arguments, GatheringType.Botanist);
     }
@@ -113,7 +112,7 @@ public partial class GatherBuddy
     private void OnGatherMin(string command, string arguments)
     {
         if (arguments.Length == 0)
-            Communicator.NoItemName(command, "item");
+            Communicator.NoItemName(command, Localize.Text("item"));
         else
             Executor.GatherItemByName(arguments, GatheringType.Miner);
     }
@@ -121,7 +120,7 @@ public partial class GatherBuddy
     private void OnGatherFish(string command, string arguments)
     {
         if (arguments.Length == 0)
-            Communicator.NoItemName(command, "fish");
+            Communicator.NoItemName(command, Localize.Text("fish"));
         else
             Executor.GatherFishByName(arguments);
     }
@@ -195,14 +194,14 @@ public partial class GatherBuddy
                 Config.MainWindowLockResize   = false;
                 break;
             default:
-                var shortHelpString = new SeStringBuilder().AddText("Use ").AddColoredText(command, Config.SeColorCommands)
-                    .AddText(" with one of the following arguments:\n")
-                    .AddColoredText("        window", Config.SeColorArguments).AddText(" - Toggle the Gather Window on or off.\n")
-                    .AddColoredText("        alarm",  Config.SeColorArguments).AddText(" - Toggle Alarms on or off.\n")
-                    .AddColoredText("        spear",  Config.SeColorArguments).AddText(" - Toggle the Spearfishing Helper on or off.\n")
-                    .AddColoredText("        fish",   Config.SeColorArguments).AddText(" - Toggle the Fish Timer window on or off.\n")
-                    .AddColoredText("        edit",   Config.SeColorArguments).AddText(" - Toggle edit mode for the fish timer.\n")
-                    .AddColoredText("        unlock", Config.SeColorArguments).AddText(" - Unlock the main window position and size.")
+                var shortHelpString = new SeStringBuilder().AddText(Localize.Text("Use ")).AddColoredText(command, Config.SeColorCommands)
+                    .AddText(Localize.Text(" with one of the following arguments:\n"))
+                    .AddColoredText("        window", Config.SeColorArguments).AddText(Localize.Text(" - Toggle the Gather Window on or off.\n"))
+                    .AddColoredText("        alarm",  Config.SeColorArguments).AddText(Localize.Text(" - Toggle Alarms on or off.\n"))
+                    .AddColoredText("        spear",  Config.SeColorArguments).AddText(Localize.Text(" - Toggle the Spearfishing Helper on or off.\n"))
+                    .AddColoredText("        fish",   Config.SeColorArguments).AddText(Localize.Text(" - Toggle the Fish Timer window on or off.\n"))
+                    .AddColoredText("        edit",   Config.SeColorArguments).AddText(Localize.Text(" - Toggle edit mode for the fish timer.\n"))
+                    .AddColoredText("        unlock", Config.SeColorArguments).AddText(Localize.Text(" - Unlock the main window position and size."))
                     .BuiltString;
                 Communicator.Print(shortHelpString);
                 return;

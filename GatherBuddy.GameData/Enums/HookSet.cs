@@ -21,14 +21,14 @@ public static class HookSetExtensions
     public static string ToName(this HookSet value)
         => value switch
         {
-            HookSet.Unknown    => "Unknown",
-            HookSet.Precise    => "Precise",
-            HookSet.Powerful   => "Powerful",
-            HookSet.Hook       => "Regular",
-            HookSet.DoubleHook => "Double",
-            HookSet.TripleHook => "Triple",
-            HookSet.Stellar    => "Stellar",
-            HookSet.None       => "None",
-            _                  => "Invalid",
+            HookSet.Unknown    => Localize.Text("Unknown"),
+            HookSet.Precise    => Localize.Text("Precise"),
+            HookSet.Powerful   => Localize.Text("Powerful"),
+            HookSet.Hook       => Localize.Display(value),
+            HookSet.DoubleHook => Localize.Text("Double"),
+            HookSet.TripleHook => Localize.Text("Triple"),
+            HookSet.Stellar    => Localize.Text("Stellar"),
+            HookSet.None       => Localize.Text("None"),
+            _                  => Localize.Text("Invalid"),
         };
 }

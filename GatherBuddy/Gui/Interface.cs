@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -12,7 +12,7 @@ namespace GatherBuddy.Gui;
 
 public partial class Interface : Window, IDisposable
 {
-    private const string PluginName = "GatherBuddy";
+    private const string PluginName = "GatherBuddy-CN";
     private const float  MinSize    = 700;
 
     private static GatherBuddy _plugin                 = null!;

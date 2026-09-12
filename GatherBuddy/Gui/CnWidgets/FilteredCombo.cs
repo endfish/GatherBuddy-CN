@@ -146,7 +146,7 @@ public abstract class CnFilterComboBase<T>
 
         // Draw the text input.
         ImGui.SetNextItemWidth(width);
-        if (LowerString.InputWithHint("##filter", "Filter...", ref _filter))
+        if (LowerString.InputWithHint("##filter", Localize.Text("Filter..."), ref _filter))
         {
             _filterDirty = true;
             if (SearchByParts)

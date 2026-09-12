@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Numerics;
 using Dalamud.Bindings.ImGui;
@@ -14,7 +14,7 @@ namespace GatherBuddy.Gui;
 
 public partial class Interface
 {
-    private sealed class WeatherTable : Table<CachedWeather>, IDisposable
+    private sealed class WeatherTable : CnTable<CachedWeather>, IDisposable
     {
         private static readonly string[] WeatherTimeStrings = new string[CachedWeather.NumWeathers];
 
@@ -45,7 +45,7 @@ public partial class Interface
         private sealed class ZoneHeader : ColumnString<CachedWeather>
         {
             public ZoneHeader()
-                => Label = "Filter Zone...";
+                => Label = Localize.Text("Filter Zone...");
 
             public override float Width
                 => _zoneSize * ImGuiHelpers.GlobalScale;
@@ -113,6 +113,7 @@ public partial class Interface
 
         protected override void PreDraw()
         {
+            base.PreDraw();
             if (_weatherSize == 0)
             {
                 _zoneSize    = Items.Max(c => ImGui.CalcTextSize(c.Zone).X) / ImGuiHelpers.GlobalScale;
@@ -167,9 +168,8 @@ public partial class Interface
     private void DrawWeatherTab()
     {
         using var id  = ImRaii.PushId("Weather");
-        using var tab = ImRaii.TabItem("Weather");
-        ImGuiUtil.HoverTooltip("Yes, 'Gloom' is weather.\n"
-          + "See the weather forecast in all zones for the following days, as well as the last one.");
+        using var tab = ImRaii.TabItem(Localize.Label("Weather"));
+        ImGuiUtil.HoverTooltip(Localize.Text("Yes, 'Gloom' is weather.\nSee the weather forecast in all zones for the following days, as well as the last one."));
 
         if (!tab)
             return;

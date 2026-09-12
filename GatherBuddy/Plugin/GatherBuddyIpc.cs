@@ -1,4 +1,4 @@
-﻿global using SharableRecord = ((uint ItemId, ushort Size, ushort BiteTime, byte Amount, byte Tug, bool Collectible, bool Large) Catch,
+global using SharableRecord = ((uint ItemId, ushort Size, ushort BiteTime, byte Amount, byte Tug, bool Collectible, bool Large) Catch,
     (int Timestamp, uint BaitItemId, uint ContentIdHash, ushort FishingSpotId, ushort Gathering, ushort Perception, byte HookSet) Cast,
     (bool Snagging, bool Chum, bool Intuition, bool FishEyes, bool IdenticalCast, bool SurfaceSlap, bool PrizeCatch, bool Patience, bool
     Patience2, bool BigGameFishing, byte AmbitiousLure, byte ModestLure) Effects);
@@ -139,7 +139,7 @@ public class GatherBuddyIpc : IDisposable
     {
         if (!GatherBuddy.GameData.Fishes.TryGetValue(fishId, out var fish))
         {
-            ImUtf8.TextFramed($"Invalid Fish #{fishId}", ColorId.WarningBg.Value());
+            ImUtf8.TextFramed(Localize.Format("Invalid Fish #{0}", fishId), ColorId.WarningBg.Value());
             return;
         }
 

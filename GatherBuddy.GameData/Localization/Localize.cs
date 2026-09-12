@@ -3,6 +3,7 @@ using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 
 namespace GatherBuddy.Localization;
@@ -32,11 +33,11 @@ public static class Localize
         return id < 0 ? translated : translated + source[id..];
     }
 
-    /// <summary>Keep the original ImGui identity even when the visible label changes.</summary>
+    /// <summary>Keep explicit ### IDs; otherwise derive a stable ID from the untranslated source.</summary>
     public static string Label(string source)
     {
         var translated = Text(source);
-        return translated == source || source.Contains("###", StringComparison.Ordinal)
+        return source.StartsWith("##", StringComparison.Ordinal) || source.Contains("###", StringComparison.Ordinal)
             ? translated
             : translated + "###" + source;
     }
@@ -44,11 +45,26 @@ public static class Localize
     public static string Format(string source, params object?[] arguments)
         => string.Format(Culture, Text(source), arguments);
 
+    public static string Display(object? value)
+    {
+        if (value is null)
+            return string.Empty;
+        var source = value.ToString() ?? string.Empty;
+        if (!value.GetType().IsEnum)
+            return source;
+        var type = value.GetType().Name;
+        return string.Join("、", source.Split(", ", StringSplitOptions.None).Select(name
+            => Translations.GetValueOrDefault($"enum.{type}.{name}", Text(name))));
+    }
+
+    public static string[] EnumNames<T>() where T : struct, Enum
+        => Enum.GetValues<T>().Select(value => Display(value)).ToArray();
+
     public static string FormatLabel(string source, params object?[] arguments)
     {
         var translated = Format(source, arguments);
         var original = string.Format(Culture, source, arguments);
-        return translated == original || original.Contains("###", StringComparison.Ordinal)
+        return original.StartsWith("##", StringComparison.Ordinal) || original.Contains("###", StringComparison.Ordinal)
             ? translated
             : translated + "###" + original;
     }

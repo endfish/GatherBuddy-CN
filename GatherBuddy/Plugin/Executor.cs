@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Dalamud.Game.ClientState.Conditions;
@@ -95,7 +95,7 @@ public class Executor
             _visitedLocations.Clear();
         _keepVisitedLocations = true;
         if (_item == null)
-            Communicator.Print("No previous gather command registered.");
+            Communicator.Print(Localize.Text("No previous gather command registered."));
     }
 
     private void DoIdentify()
@@ -199,14 +199,14 @@ public class Executor
         };
         if (set == null)
         {
-            Communicator.PrintError("No job type associated with location ", _location.Name, GatherBuddy.Config.SeColorArguments, ".");
+            Communicator.PrintError(Localize.Text("No job type associated with location "), _location.Name, GatherBuddy.Config.SeColorArguments, ".");
             return;
         }
 
         if (set.Length == 0)
         {
-            Communicator.PrintError("No gear set for ", _location.GatheringType.ToString(), GatherBuddy.Config.SeColorArguments,
-                " configured.");
+            Communicator.PrintError(Localize.Text("No gear set for "), Localize.Display(_location.GatheringType), GatherBuddy.Config.SeColorArguments,
+                Localize.Text(" configured."));
             return;
         }
 
@@ -404,14 +404,14 @@ public class Executor
     {
         if (territory.Aetherytes.Count == 0)
         {
-            Communicator.PrintError(string.Empty, territory.Name, GatherBuddy.Config.SeColorArguments, " has no valid aetheryte.");
+            Communicator.PrintError(string.Empty, territory.Name, GatherBuddy.Config.SeColorArguments, Localize.Text(" has no valid aetheryte."));
             return;
         }
 
         var aetheryte = territory.Aetherytes.FirstOrDefault(a => Teleporter.IsAttuned(a.Id));
         if (aetheryte == null)
         {
-            Communicator.PrintError("Not attuned to any aetheryte in ", territory.Name, GatherBuddy.Config.SeColorArguments, ".");
+            Communicator.PrintError(Localize.Text("Not attuned to any aetheryte in "), territory.Name, GatherBuddy.Config.SeColorArguments, ".");
             return;
         }
 

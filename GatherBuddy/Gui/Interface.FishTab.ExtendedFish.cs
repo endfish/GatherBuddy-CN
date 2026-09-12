@@ -1,4 +1,4 @@
-﻿using Dalamud.Interface.Textures;
+using Dalamud.Interface.Textures;
 using Dalamud.Interface.Utility;
 using GatherBuddy.Classes;
 using GatherBuddy.Config;
@@ -138,7 +138,7 @@ public partial class Interface
             return fish.Predators.Select(p => new Predator
             {
                 Fish   = p.Item1,
-                Amount = p.Item2.ToString(),
+                Amount = Localize.Display(p.Item2),
                 Name   = p.Item1.Name[GatherBuddy.Language],
                 Icon   = Icons.DefaultStorage.TextureProvider.GetFromGameIcon(new GameIconLookup(p.Item1.ItemData.Icon)),
             }).ToArray();
@@ -151,7 +151,7 @@ public partial class Interface
                 [
                     new BaitOrder
                     {
-                        Name    = string.Intern($"{fish.Size.ToName()} and {fish.Speed.ToName()}"),
+                        Name    = string.Intern(Localize.Format("{0} and {1}", fish.Size.ToName(), fish.Speed.ToName())),
                         Fish    = null,
                         Icon    = Icons.FromSize(fish.Size),
                         Bite    = Bites.Unknown,
@@ -257,9 +257,9 @@ public partial class Interface
             var minutes = intuition / RealTime.SecondsPerMinute;
             var seconds = intuition % RealTime.SecondsPerMinute;
             if (seconds == 0)
-                return minutes == 1 ? "Intuition for 1 Minute" : string.Intern($"Intuition for {minutes} Minutes");
+                return minutes == 1 ? Localize.Text("Intuition for 1 Minute") : string.Intern(Localize.Format("Intuition for {0} Minutes", minutes));
 
-            return string.Intern($"Intuition for {minutes}:{seconds:D2} Minutes");
+            return string.Intern(Localize.Format("Intuition for {0}:{1:D2} Minutes", minutes, seconds));
         }
 
         public ExtendedFish(Fish data)
@@ -281,17 +281,17 @@ public partial class Interface
                 Data.FishingSpots.Where(f => f.ClosestAetheryte != null).Select(f => f.ClosestAetheryte!.Name).Distinct());
             if (!Aetherytes.Contains('\n'))
                 Aetherytes = '\0' + Aetherytes;
-            Patch = string.Intern($"Patch {Data.Patch.ToVersionString()}");
-            FishType = Data.OceanFish ? "Ocean Fish" :
-                Data.IsSpearFish      ? "Spearfishing" :
-                Data.IsBigFish        ? "Big Fish" : "Regular Fish";
+            Patch = string.Intern(Localize.Format("Patch {0}", Data.Patch.ToVersionString()));
+            FishType = Data.OceanFish ? Localize.Text("Ocean Fish") :
+                Data.IsSpearFish      ? Localize.Text("Spearfishing") :
+                Data.IsBigFish        ? Localize.Text("Big Fish") : Localize.Text("Regular Fish");
 
             Time = !Data.FishRestrictions.HasFlag(FishRestrictions.Time)
-                ? "No Time Restrictions"
+                ? Localize.Text("No Time Restrictions")
                 : Data.OceanFish
                     ? PrintOceanTime(Data.OceanTime)
                     : Data.Interval.AlwaysUp()
-                        ? "Unknown Uptime"
+                        ? Localize.Text("Unknown Uptime")
                         : string.Intern(Data.Interval.PrintHours());
 
             UptimePercent = SetUptime(Data);
@@ -313,13 +313,13 @@ public partial class Interface
         {
             return time switch
             {
-                OceanTime.Sunset                   => "Sunset",
-                OceanTime.Sunset | OceanTime.Night => "Sunset or Night",
-                OceanTime.Sunset | OceanTime.Day   => "Sunset or Day",
-                OceanTime.Night                    => "Night",
-                OceanTime.Night | OceanTime.Day    => "Day or Night",
-                OceanTime.Day                      => "Day",
-                _                                  => "Unknown Uptime",
+                OceanTime.Sunset                   => Localize.Text("Sunset"),
+                OceanTime.Sunset | OceanTime.Night => Localize.Text("Sunset or Night"),
+                OceanTime.Sunset | OceanTime.Day   => Localize.Text("Sunset or Day"),
+                OceanTime.Night                    => Localize.Text("Night"),
+                OceanTime.Night | OceanTime.Day    => Localize.Text("Day or Night"),
+                OceanTime.Day                      => Localize.Text("Day"),
+                _                                  => Localize.Text("Unknown Uptime"),
             };
         }
 
@@ -333,20 +333,20 @@ public partial class Interface
         {
             if (!fish.Data.FishRestrictions.HasFlag(FishRestrictions.Weather))
             {
-                ImUtf8.TextFramed("No Weather Restrictions"u8, ColorId.HeaderWeather.Value());
+                ImUtf8.TextFramed(Localize.Text("No Weather Restrictions"), ColorId.HeaderWeather.Value());
                 return;
             }
 
             if (fish.WeatherIcons.Length == 0 && fish.TransitionIcons.Length == 0)
             {
-                ImUtf8.TextFramed("Unknown Weather Restrictions"u8, ColorId.HeaderWeather.Value());
+                ImUtf8.TextFramed(Localize.Text("Unknown Weather Restrictions"), ColorId.HeaderWeather.Value());
                 return;
             }
 
             using var style = ImRaii.PushStyle(ImGuiStyleVar.ItemSpacing, ImGui.GetStyle().ItemSpacing / 2);
             if (fish.TransitionIcons.Length > 0)
             {
-                AlignTextToSize(fish.TransitionIcons.Length > 1 ? "Requires one of" : "Requires", weatherIconSize);
+                AlignTextToSize(fish.TransitionIcons.Length > 1 ? Localize.Text("Requires one of") : Localize.Text("Requires"), weatherIconSize);
                 style.Push(ImGuiStyleVar.ItemSpacing, Vector2.One * ImGuiHelpers.GlobalScale);
                 foreach (var w in fish.TransitionIcons)
                 {
@@ -360,11 +360,11 @@ public partial class Interface
                 style.Pop();
 
                 ImGui.SameLine();
-                AlignTextToSize(fish.WeatherIcons.Length > 1 ? "followed by one of" : "followed by", weatherIconSize);
+                AlignTextToSize(fish.WeatherIcons.Length > 1 ? Localize.Text("followed by one of") : Localize.Text("followed by"), weatherIconSize);
                 if (fish.WeatherIcons.Length == 0)
                 {
                     ImGui.SameLine();
-                    AlignTextToSize(" Anything", weatherIconSize);
+                    AlignTextToSize(Localize.Text(" Anything"), weatherIconSize);
                 }
                 else
                 {
@@ -381,7 +381,7 @@ public partial class Interface
             }
             else if (fish.WeatherIcons.Length > 0)
             {
-                AlignTextToSize(fish.WeatherIcons.Length > 1 ? "Requires one of" : "Requires", weatherIconSize);
+                AlignTextToSize(fish.WeatherIcons.Length > 1 ? Localize.Text("Requires one of") : Localize.Text("Requires"), weatherIconSize);
                 style.Push(ImGuiStyleVar.ItemSpacing, Vector2.One * ImGuiHelpers.GlobalScale);
                 foreach (var w in fish.WeatherIcons)
                 {
@@ -398,7 +398,7 @@ public partial class Interface
         {
             if (fish.Bait.Length == 0)
             {
-                ImUtf8.TextFramed("Unknown Catch Method"u8, 0xFF0000A0);
+                ImUtf8.TextFramed(Localize.Text("Unknown Catch Method"), 0xFF0000A0);
                 return;
             }
 
@@ -538,7 +538,7 @@ public partial class Interface
         private static void PrintPoints(ExtendedFish fish)
         {
             if (fish.Data.Points > 0)
-                ImUtf8.TextFramed($"Worth {fish.Data.Points} Points", 0xFF006400);
+                ImUtf8.TextFramed(Localize.Format("Worth {0} Points", fish.Data.Points), 0xFF006400);
         }
 
         public void SetTooltip(Territory territory, Vector2 iconSize, Vector2 smallIconSize, Vector2 weatherIconSize, bool printName,

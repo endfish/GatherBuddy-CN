@@ -21,7 +21,7 @@ public static partial class CnWidget
     public static bool DrawChatTypeSelector(string label, string description, XivChatType currentValue, Action<XivChatType> setter)
     {
         using var id    = ImRaii.PushId(label);
-        using var combo = ImRaii.Combo(label, currentValue.ToString());
+        using var combo = ImRaii.Combo(label, Localize.Display(currentValue));
         ImGuiUtil.HoverTooltip(description);
         if (!combo)
             return false;
@@ -30,7 +30,7 @@ public static partial class CnWidget
         // Draw the actual combo values.
         foreach (var type in Enum.GetValues<XivChatType>())
         {
-            if (!ImGui.Selectable(type.ToString(), currentValue == type) || type == currentValue)
+            if (!ImGui.Selectable(Localize.Display(type), currentValue == type) || type == currentValue)
                 continue;
 
             setter(type);

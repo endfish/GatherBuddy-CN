@@ -52,7 +52,7 @@ public class CnItemSelector<T>
     private object? _dragDropData;
 
     // Labels
-    private readonly string _label = "##CnItemSelector";
+    private readonly string _label = "##ItemSelector";
 
     public string Label
     {
@@ -93,7 +93,7 @@ public class CnItemSelector<T>
             0x0F => 4,
             _    => 0,
         };
-        Label = "##CnItemSelector";
+        Label = "##ItemSelector";
         SetCurrent(0);
     }
 
@@ -236,7 +236,7 @@ public class CnItemSelector<T>
             {
                 _dragDropData = idx;
                 ImGui.SetDragDropPayload(MoveLabel, null, 0);
-                ImGui.TextUnformatted($"Reordering {idx + 1}...");
+                ImGui.TextUnformatted(Localize.Format("Reordering {0}...", idx + 1));
             }
         }
 
@@ -270,7 +270,7 @@ public class CnItemSelector<T>
         var       newFilter = Filter;
         using var style     = ImRaii.PushStyle(ImGuiStyleVar.FrameRounding, 0);
         ImGui.SetNextItemWidth(width);
-        var enterPressed = ImUtf8.InputText("##"u8, ref newFilter, "Filter..."u8, ImGuiInputTextFlags.EnterReturnsTrue);
+        var enterPressed = ImUtf8.InputText("##"u8, ref newFilter, Localize.Text("Filter..."), ImGuiInputTextFlags.EnterReturnsTrue);
         if (newFilter != Filter)
         {
             Filter      = newFilter;
@@ -318,7 +318,7 @@ public class CnItemSelector<T>
         if (ImGui.Button(FontAwesomeIcon.Plus.ToIconString(), Vector2.UnitX * width))
             ImGui.OpenPopup(newNamePopupAdd);
         using var font = ImRaii.PushFont(UiBuilder.DefaultFont);
-        ImGuiUtil.HoverTooltip("Add New");
+        ImGuiUtil.HoverTooltip(Localize.Text("Add New"));
 
         if (!OpenNameField(newNamePopupAdd, out var newName))
             return;
@@ -337,7 +337,7 @@ public class CnItemSelector<T>
         if (ImGui.Button(FontAwesomeIcon.Clipboard.ToIconString(), Vector2.UnitX * width))
             ImGui.OpenPopup(newNamePopupImport);
         using var font = ImRaii.PushFont(UiBuilder.DefaultFont);
-        ImGuiUtil.HoverTooltip("Import from Clipboard");
+        ImGuiUtil.HoverTooltip(Localize.Text("Import from Clipboard"));
 
         if (!OpenNameField(newNamePopupImport, out var newName))
             return;
@@ -353,7 +353,7 @@ public class CnItemSelector<T>
     private bool OpenNameField(string popupName, out string newName)
     {
         newName = string.Empty;
-        if (ImGuiUtil.OpenNameField(popupName, ref _newName))
+        if (CnWidget.OpenNameField(popupName, ref _newName))
         {
             newName  = _newName;
             _newName = string.Empty;
@@ -371,7 +371,7 @@ public class CnItemSelector<T>
             ImGui.OpenPopup(newNamePopupDuplicate);
 
         using var font = ImRaii.PushFont(UiBuilder.DefaultFont);
-        ImGuiUtil.HoverTooltip("Duplicate Current Selection");
+        ImGuiUtil.HoverTooltip(Localize.Text("Duplicate Current Selection"));
 
         if (!OpenNameField(newNamePopupDuplicate, out var newName))
             return;
@@ -387,7 +387,7 @@ public class CnItemSelector<T>
         => ImGui.GetIO().KeyCtrl;
 
     protected virtual string DeleteButtonTooltip()
-        => "Delete Current Selection. Hold Control while clicking.";
+        => Localize.Text("Delete Current Selection. Hold Control while clicking.");
 
     private void DrawDeleteButton(float width)
     {

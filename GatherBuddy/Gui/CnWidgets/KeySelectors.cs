@@ -23,7 +23,7 @@ public static partial class CnWidget
         IReadOnlyList<VirtualKey> keys)
     {
         using var id    = ImRaii.PushId(label);
-        using var combo = ImRaii.Combo(label, currentValue.GetFancyName());
+        using var combo = ImRaii.Combo(label, Localize.Text(currentValue.GetFancyName()));
         ImGuiUtil.HoverTooltip(description);
         if (!combo)
             return false;
@@ -32,7 +32,7 @@ public static partial class CnWidget
         // Draw the actual combo values.
         foreach (var key in keys)
         {
-            if (!ImGui.Selectable(key.GetFancyName(), currentValue == key) || currentValue == key)
+            if (!ImGui.Selectable(Localize.Label(key.GetFancyName()), currentValue == key) || currentValue == key)
                 continue;
 
             setter(key);
@@ -63,8 +63,8 @@ public static partial class CnWidget
         {
             using var indent = ImRaii.PushIndent();
             ImGui.SetNextItemWidth(width - indent.Indentation);
-            changes |= ModifierSelector("Additional Modifier",
-                "Set another optional modifier key to be used in conjunction with the first modifier.",
+            changes |= ModifierSelector(Localize.Text("Additional Modifier"),
+                Localize.Text("Set another optional modifier key to be used in conjunction with the first modifier."),
                 currentValue.Modifier2, k => copy.SetModifier2(k));
         }
 
@@ -91,14 +91,14 @@ public static partial class CnWidget
         {
             using var indent = ImRaii.PushIndent();
             ImGui.SetNextItemWidth(width - indent.Indentation);
-            changes |= ModifierSelector("Modifier", "Set an optional modifier key to be used in conjunction with the selected hotkey.",
+            changes |= ModifierSelector(Localize.Text("Modifier"), Localize.Text("Set an optional modifier key to be used in conjunction with the selected hotkey."),
                 currentValue.Modifier1,             k => copy.SetModifier1(k));
 
             if (currentValue.Modifier1 != VirtualKey.NO_KEY)
             {
                 ImGui.SetNextItemWidth(width - indent.Indentation);
-                changes |= ModifierSelector("Additional Modifier",
-                    "Set another optional modifier key to be used in conjunction with the selected hotkey and the first modifier.",
+                changes |= ModifierSelector(Localize.Text("Additional Modifier"),
+                    Localize.Text("Set another optional modifier key to be used in conjunction with the selected hotkey and the first modifier."),
                     currentValue.Modifier2, k => copy.SetModifier2(k));
             }
         }

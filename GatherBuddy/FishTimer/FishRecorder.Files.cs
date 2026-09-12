@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -73,7 +73,7 @@ public partial class FishRecorder
         try
         {
             var bytes   = Functions.DecompressedBase64(data);
-            var records = ReadBytes(bytes, "Imported Data");
+            var records = ReadBytes(bytes, Localize.Text("Imported Data"));
             MergeRecordsIn(records);
         }
         catch (Exception e)
@@ -99,7 +99,7 @@ public partial class FishRecorder
         try
         {
             var bytes = File.ReadAllBytes(file.FullName);
-            return ReadBytes(bytes, $"File {file.FullName}");
+            return ReadBytes(bytes, Localize.Format("File {0}", file.FullName));
         }
         catch (Exception e)
         {

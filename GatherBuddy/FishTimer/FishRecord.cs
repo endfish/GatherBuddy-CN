@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -193,7 +193,7 @@ public struct FishRecord
     public readonly unsafe void ToBytes(byte[] bytes, int from)
     {
         if (bytes.Length < from + ByteLength)
-            throw new ArgumentException("Not enough storage");
+            throw new ArgumentException(Localize.Text("Not enough storage"));
 
         fixed (FishRecord* ptr = &this)
         {

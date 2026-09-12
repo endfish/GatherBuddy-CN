@@ -157,7 +157,7 @@ public readonly struct RepeatingInterval : IEquatable<RepeatingInterval>
         var sStart = $"{hStart:D2}:{mStart:D2}";
         var sEnd   = $"{hEnd:D2}:{mEnd:D2}";
 
-        return simple ? $"{sStart}-{sEnd}" : $"{sStart} - {sEnd} ET";
+        return simple ? $"{sStart}-{sEnd}" : Localize.Format("{0} - {1} ET", sStart, sEnd);
     }
 
     public bool Contains(RepeatingInterval other)

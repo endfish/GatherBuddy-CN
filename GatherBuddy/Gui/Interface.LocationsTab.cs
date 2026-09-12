@@ -20,7 +20,7 @@ namespace GatherBuddy.Gui;
 
 public partial class Interface
 {
-    private sealed class LocationTable : Table<ILocation>
+    private sealed class LocationTable : CnTable<ILocation>
     {
         private static float _nameColumnWidth;
         private static float _territoryColumnWidth;
@@ -32,28 +32,29 @@ public partial class Interface
 
         protected override void PreDraw()
         {
+            base.PreDraw();
             if (_nameColumnWidth != 0)
                 return;
 
             _nameColumnWidth      = _plugin.LocationManager.AllLocations.Max(l => TextWidth(l.Name)) / ImGuiHelpers.GlobalScale;
             _territoryColumnWidth = _plugin.LocationManager.AllLocations.Max(l => TextWidth(l.Territory.Name)) / ImGuiHelpers.GlobalScale;
             _aetheryteColumnWidth = GatherBuddy.GameData.Aetherytes.Values.Max(a => TextWidth(a.Name)) / ImGuiHelpers.GlobalScale;
-            _coordColumnWidth     = TextWidth("X-Coord") / ImGuiHelpers.GlobalScale + Table.ArrowWidth;
-            _radiusColumnWidth    = TextWidth("Radius") / ImGuiHelpers.GlobalScale + Table.ArrowWidth;
-            _levelColumnWidth    = TextWidth("Level") / ImGuiHelpers.GlobalScale + Table.ArrowWidth;
-            _typeColumnWidth      = Enum.GetValues<GatheringType>().Max(t => TextWidth(t.ToString())) / ImGuiHelpers.GlobalScale;
+            _coordColumnWidth     = TextWidth(Localize.Text("X-Coord")) / ImGuiHelpers.GlobalScale + Table.ArrowWidth;
+            _radiusColumnWidth    = TextWidth(Localize.Text("Radius")) / ImGuiHelpers.GlobalScale + Table.ArrowWidth;
+            _levelColumnWidth    = TextWidth(Localize.Text("Level")) / ImGuiHelpers.GlobalScale + Table.ArrowWidth;
+            _typeColumnWidth      = Enum.GetValues<GatheringType>().Max(t => TextWidth(Localize.Display(t))) / ImGuiHelpers.GlobalScale;
         }
 
-        private static readonly NameColumn      _nameColumn      = new() { Label = "Name" };
-        private static readonly TypeColumn      _typeColumn      = new() { Label = "Type" };
-        private static readonly TerritoryColumn _territoryColumn = new() { Label = "Territory" };
-        private static readonly LevelColumn     _levelColumn     = new() { Label = "Level" };
-        private static readonly AetheryteColumn _aetheryteColumn = new() { Label = "Aetheryte" };
-        private static readonly XCoordColumn    _xCoordColumn    = new() { Label = "X-Coord" };
-        private static readonly YCoordColumn    _yCoordColumn    = new() { Label = "Y-Coord" };
-        private static readonly RadiusColumn    _radiusColumn    = new() { Label = "Radius" };
-        private static readonly MarkerColumn    _markerColumn    = new() { Label = "Markers" };
-        private static readonly ItemColumn      _itemColumn      = new() { Label = "Items" };
+        private static readonly NameColumn      _nameColumn      = new() { Label = Localize.Text("Name") };
+        private static readonly TypeColumn      _typeColumn      = new() { Label = Localize.Text("Type") };
+        private static readonly TerritoryColumn _territoryColumn = new() { Label = Localize.Text("Territory") };
+        private static readonly LevelColumn     _levelColumn     = new() { Label = Localize.Text("Level") };
+        private static readonly AetheryteColumn _aetheryteColumn = new() { Label = Localize.Text("Aetheryte") };
+        private static readonly XCoordColumn    _xCoordColumn    = new() { Label = Localize.Text("X-Coord") };
+        private static readonly YCoordColumn    _yCoordColumn    = new() { Label = Localize.Text("Y-Coord") };
+        private static readonly RadiusColumn    _radiusColumn    = new() { Label = Localize.Text("Radius") };
+        private static readonly MarkerColumn    _markerColumn    = new() { Label = Localize.Text("Markers") };
+        private static readonly ItemColumn      _itemColumn      = new() { Label = Localize.Text("Items") };
 
         private sealed class NameColumn : ColumnString<ILocation>
         {
@@ -98,7 +99,7 @@ public partial class Interface
             public override void DrawColumn(ILocation location, int _)
             {
                 ImGui.AlignTextToFramePadding();
-                ImGui.Text(location.GatheringType.ToString());
+                ImGui.Text(Localize.Display(location.GatheringType));
             }
 
             public override int Compare(ILocation a, ILocation b)
@@ -182,7 +183,7 @@ public partial class Interface
             }
 
             public override string ToName(ILocation location)
-                => location.ClosestAetheryte?.Name ?? "None";
+                => location.ClosestAetheryte?.Name ?? Localize.Text("None");
 
             public override float Width
                 => _aetheryteColumnWidth * ImGuiHelpers.GlobalScale;
@@ -191,12 +192,12 @@ public partial class Interface
             {
                 var       overwritten = location.DefaultAetheryte != location.ClosestAetheryte;
                 using var color       = ImRaii.PushColor(ImGuiCol.FrameBg, ColorId.ChangedLocationBg.Value(), overwritten);
-                var       currentName = location.ClosestAetheryte?.Name ?? "None";
+                var       currentName = location.ClosestAetheryte?.Name ?? Localize.Text("None");
                 if (_aetheryteCombo.Draw(currentName, out var newIdx))
                     _plugin.LocationManager.SetAetheryte(location, _aetherytes[newIdx]);
                 if (overwritten)
                 {
-                    ImGuiUtil.HoverTooltip($"Right-click to restore default. ({location.DefaultAetheryte?.Name ?? "None"})");
+                    ImGuiUtil.HoverTooltip(Localize.Format("Right-click to restore default. ({0})", location.DefaultAetheryte?.Name ?? Localize.Text("None")));
                     if (ImGui.IsItemClicked(ImGuiMouseButton.Right))
                         _plugin.LocationManager.SetAetheryte(location, location.DefaultAetheryte);
                 }
@@ -221,7 +222,7 @@ public partial class Interface
                     _plugin.LocationManager.SetXCoord(location, (int)(x * 100f + 0.5f));
                 if (overwritten)
                 {
-                    ImGuiUtil.HoverTooltip($"Right-click to restore default. ({location.DefaultXCoord / 100f:0.00})");
+                    ImGuiUtil.HoverTooltip(Localize.Format("Right-click to restore default. ({0:0.00})", location.DefaultXCoord / 100f));
                     if (ImGui.IsItemClicked(ImGuiMouseButton.Right))
                         _plugin.LocationManager.SetXCoord(location, location.DefaultXCoord);
                 }
@@ -249,7 +250,7 @@ public partial class Interface
                     _plugin.LocationManager.SetYCoord(location, (int)(y * 100f + 0.5f));
                 if (overwritten)
                 {
-                    ImGuiUtil.HoverTooltip($"Right-click to restore default. ({location.DefaultYCoord / 100f:0.00})");
+                    ImGuiUtil.HoverTooltip(Localize.Format("Right-click to restore default. ({0:0.00})", location.DefaultYCoord / 100f));
                     if (ImGui.IsItemClicked(ImGuiMouseButton.Right))
                         _plugin.LocationManager.SetYCoord(location, location.DefaultYCoord);
                 }
@@ -262,7 +263,7 @@ public partial class Interface
         private sealed class RadiusColumn : ColumnString<ILocation>
         {
             public override string ToName(ILocation location)
-                => location.Radius.ToString();
+                => Localize.Display(location.Radius);
 
             public override float Width
                 => _radiusColumnWidth * ImGuiHelpers.GlobalScale;
@@ -277,7 +278,7 @@ public partial class Interface
                     _plugin.LocationManager.SetRadius(location, Math.Clamp((ushort)radius, (ushort)0, IMarkable.RadiusMax));
                 if (overwritten)
                 {
-                    ImGuiUtil.HoverTooltip($"Right-click to restore default. ({location.DefaultRadius})");
+                    ImGuiUtil.HoverTooltip(Localize.Format("Right-click to restore default. ({0})", location.DefaultRadius));
                     if (ImGui.IsItemClicked(ImGuiMouseButton.Right))
                         _plugin.LocationManager.SetRadius(location, location.DefaultRadius);
                 }
@@ -347,13 +348,13 @@ public partial class Interface
                 var       markerCount   = markers.CountSet;
                 var       locationCount = location.Markers.CountSet;
                 var       invalid       = Dalamud.ClientState.TerritoryType != location.Territory.Id;
-                var tt = invalid     ? "Not in the correct zone for this location." :
-                    markerCount == 0 ? "No markers set that could be stored for this location." :
-                                       $"Store the currently placed markers for this location:\n\n{string.Join("\n", markers.Select(m => float.IsNaN(m.X) ? " - " : $"{m.X:F2} - {m.Y:F2} - {m.Z:F2}"))}";
+                var tt = invalid     ? Localize.Text("Not in the correct zone for this location.") :
+                    markerCount == 0 ? Localize.Text("No markers set that could be stored for this location.") :
+                                       Localize.Format("Store the currently placed markers for this location:\n\n{0}", string.Join("\n", markers.Select(m => float.IsNaN(m.X) ? " - " : $"{m.X:F2} - {m.Y:F2} - {m.Z:F2}")));
 
                 if (locationCount > 0)
                     tt +=
-                        $"\n\nMarkers stored for this location:\n\n{string.Join("\n", location.Markers.Select(m => float.IsNaN(m.X) ? " - " : $"{m.X:F2} - {m.Y:F2} - {m.Z:F2}"))}";
+                        Localize.Format("\n\nMarkers stored for this location:\n\n{0}", string.Join("\n", location.Markers.Select(m => float.IsNaN(m.X) ? " - " : $"{m.X:F2} - {m.Y:F2} - {m.Z:F2}")));
 
                 if (ImGuiUtil.DrawDisabledButton(FontAwesomeIcon.Map.ToIconString(), new Vector2(ImGui.GetFrameHeight()), tt,
                         markerCount == 0 || invalid, true))
@@ -361,8 +362,8 @@ public partial class Interface
 
                 ImGui.SameLine();
                 tt = locationCount == 0
-                    ? "No markers stored for this location."
-                    : $"Remove the stored markers for this location:\n\n{string.Join("\n", location.Markers.Select(m => float.IsNaN(m.X) ? " - " : $"{m.X:F2} - {m.Y:F2} - {m.Z:F2}"))}";
+                    ? Localize.Text("No markers stored for this location.")
+                    : Localize.Format("Remove the stored markers for this location:\n\n{0}", string.Join("\n", location.Markers.Select(m => float.IsNaN(m.X) ? " - " : $"{m.X:F2} - {m.Y:F2} - {m.Z:F2}")));
                 if (ImGuiUtil.DrawDisabledButton(FontAwesomeIcon.Trash.ToIconString(), new Vector2(ImGui.GetFrameHeight()), tt,
                         locationCount == 0, true))
                     _plugin.LocationManager.SetMarkers(location, WaymarkSet.None);
@@ -380,9 +381,8 @@ public partial class Interface
     private void DrawLocationsTab()
     {
         using var id  = ImRaii.PushId("Locations");
-        using var tab = ImRaii.TabItem("Locations");
-        ImGuiUtil.HoverTooltip("Default locations getting you down?\n"
-          + "Set up custom aetherytes or map marker locations for specific nodes.");
+        using var tab = ImRaii.TabItem(Localize.Label("Locations"));
+        ImGuiUtil.HoverTooltip(Localize.Text("Default locations getting you down?\nSet up custom aetherytes or map marker locations for specific nodes."));
 
         if (!tab)
             return;

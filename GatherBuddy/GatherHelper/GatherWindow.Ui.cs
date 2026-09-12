@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -72,14 +72,14 @@ public class GatherWindow : Window
     {
         var sb = new StringBuilder();
         sb.Append(loc == null
-            ? "Unknown Location\nUnknown Territory\nUnknown Aetheryte\n"
-            : $"{loc.Name}\n{loc.Territory.Name}\n{loc.ClosestAetheryte?.Name ?? "No Aetheryte"}\n");
+            ? Localize.Text("Unknown Location\nUnknown Territory\nUnknown Aetheryte\n")
+            : $"{loc.Name}\n{loc.Territory.Name}\n{loc.ClosestAetheryte?.Name ?? Localize.Text("No Aetheryte")}\n");
 
         sb.Append(time.Equals(TimeInterval.Always)
-            ? "Always Up"
+            ? Localize.Text("Always Up")
             : $"{time.Start}\n{time.End}\n{time.DurationString()}\n{TimeInterval.DurationString(time.Start > GatherBuddy.Time.ServerTime ? time.Start : time.End, GatherBuddy.Time.ServerTime, false)}");
 
-        return sb.ToString();
+        return Localize.Display(sb);
     }
 
     private static void CreateTooltip(IGatherable? item, ILocation? loc, TimeInterval time)

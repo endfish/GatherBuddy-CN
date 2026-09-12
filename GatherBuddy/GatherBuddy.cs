@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -82,6 +82,8 @@ public partial class GatherBuddy : IDalamudPlugin
         try
         {
             Dalamud.Initialize(pluginInterface);
+            // Load shared resources before configuration defaults and cached UI labels.
+            _ = Localize.Entries;
             Icons.Init(Dalamud.GameData, Dalamud.Textures);
             Log     = new Logger();
             Dynamis = new DynamisIpc(pluginInterface, Log);

@@ -113,14 +113,14 @@ public readonly struct TimeInterval : IEquatable<TimeInterval>
         return tmp.Time switch
         {
             > RealTime.MillisecondsPerDay => shortString
-                ? $">{tmp.TotalDays}d"
-                : $"{((float)tmp.Time / RealTime.MillisecondsPerDay).ToString("F2", CultureInfo.InvariantCulture)} Days",
+                ? Localize.Format(">{0}d", tmp.TotalDays)
+                : Localize.Format("{0} Days", ((float)tmp.Time / RealTime.MillisecondsPerDay).ToString("F2", CultureInfo.InvariantCulture)),
             > RealTime.MillisecondsPerHour => shortString
-                ? $">{tmp.TotalHours}h"
-                : $"{tmp.TotalHours:D2}:{tmp.CurrentMinute:D2} Hours",
+                ? Localize.Format(">{0}h", tmp.TotalHours)
+                : Localize.Format("{0:D2}:{1:D2} Hours", tmp.TotalHours, tmp.CurrentMinute),
             _ => shortString
-                ? $"{tmp.TotalMinutes}:{tmp.CurrentSecond:D2}m"
-                : $"{tmp.TotalMinutes:D2}:{tmp.CurrentSecond:D2} Minutes",
+                ? Localize.Format("{0}:{1:D2}m", tmp.TotalMinutes, tmp.CurrentSecond)
+                : Localize.Format("{0:D2}:{1:D2} Minutes", tmp.TotalMinutes, tmp.CurrentSecond),
         };
     }
 
@@ -129,19 +129,19 @@ public readonly struct TimeInterval : IEquatable<TimeInterval>
     {
         if (this == Always)
         {
-            timeString = "Always";
+            timeString = Localize.Text("Always");
             return true;
         }
 
         if (this == Never)
         {
-            timeString = "Never";
+            timeString = Localize.Text("Never");
             return false;
         }
 
         if (this == Invalid)
         {
-            timeString = "Unknown";
+            timeString = Localize.Text("Unknown");
             return false;
         }
 
@@ -149,7 +149,7 @@ public readonly struct TimeInterval : IEquatable<TimeInterval>
         {
             if (End < now)
             {
-                timeString = "Never";
+                timeString = Localize.Text("Never");
                 return false;
             }
 

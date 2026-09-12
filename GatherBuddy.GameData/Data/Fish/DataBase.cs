@@ -291,7 +291,7 @@ public static partial class Fish
         if (fish == null)
             return null;
 
-        fish.Guide = value;
+        fish.Guide = Localize.Text(value);
         return fish;
     }
 

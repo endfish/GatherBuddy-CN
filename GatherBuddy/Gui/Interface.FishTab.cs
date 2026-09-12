@@ -20,7 +20,7 @@ namespace GatherBuddy.Gui;
 
 public partial class Interface
 {
-    private sealed class FishTable : Table<ExtendedFish>, IDisposable
+    private sealed class FishTable : CnTable<ExtendedFish>, IDisposable
     {
         private static float _nameColumnWidth;
         private static float _caughtColumnWidth;
@@ -40,17 +40,18 @@ public partial class Interface
 
         protected override void PreDraw()
         {
+            base.PreDraw();
             if (_globalScale != ImGuiHelpers.GlobalScale)
             {
                 _globalScale       = ImGuiHelpers.GlobalScale;
                 _caughtColumnWidth = TextWidth(_caughtColumn.Label) / Scale + Table.ArrowWidth;
                 _nameColumnWidth   = (Items.Max(i => TextWidth(i.Data.Name[GatherBuddy.Language])) + ItemSpacing.X + LineIconSize.X) / Scale;
-                _nextUptimeColumnWidth = Math.Max(TextWidth("99:99 Minutes") / Scale,
+                _nextUptimeColumnWidth = Math.Max(TextWidth(Localize.Text("99:99 Minutes")) / Scale,
                     TextWidth(_nextUptimeColumn.Label) / Scale + Table.ArrowWidth);
                 _uptimeColumnWidth           = TextWidth("999.9%") / Scale;
                 _baitColumnWidth             = (Items.Max(f => TextWidth(f.Bait.First().Name)) + ItemSpacing.X + LineIconSize.X) / Scale;
                 _closestAetheryteColumnWidth = GatherBuddy.GameData.Aetherytes.Values.Max(a => TextWidth(a.Name)) / Scale;
-                _typeColumnWidth             = TextWidth("Spearfishing") / Scale;
+                _typeColumnWidth             = TextWidth(Localize.Text("Spearfishing")) / Scale;
                 _collectibleColumnWidth      = TextWidth(_collectibleColumn.Label) / Scale + Table.ArrowWidth;
                 _patchColumnWidth            = TextWidth(_patchColumn.Label) / Scale + Table.ArrowWidth;
                 _folkloreColumnWidth         = Items.Max(i => TextWidth(i.Data.Folklore)) / Scale;
@@ -76,20 +77,20 @@ public partial class Interface
             GatherBuddy.FishLog.Change             += OnLogChange;
         }
 
-        private static readonly NameColumn        _nameColumn        = new() { Label = "Item Name..." };
-        private static readonly CaughtColumn      _caughtColumn      = new() { Label = "Log" };
-        private static readonly NextUptimeColumn  _nextUptimeColumn  = new() { Label = "Next Uptime" };
-        private static readonly UptimesColumn     _uptimeColumn      = new() { Label = "Up%" };
-        private static readonly BaitColumn        _baitColumn        = new() { Label = "Bait..." };
-        private static readonly AetheryteColumn   _aetheryteColumn   = new() { Label = "Aetheryte..." };
-        private static readonly TypeColumn        _typeColumn        = new() { Label = "Fish Type" };
-        private static readonly CollectibleColumn _collectibleColumn = new() { Label = "Coll." };
-        private static readonly PatchColumn       _patchColumn       = new() { Label = "Patch" };
-        private static readonly FolkloreColumn    _folkloreColumn    = new() { Label = "Folklore..." };
-        private static readonly BestSpotColumn    _bestSpotColumn    = new() { Label = "Best Spot..." };
-        private static readonly BestZoneColumn    _bestZoneColumn    = new() { Label = "Best Zone..." };
-        private static readonly ItemIdColumn      _itemIdColumn      = new() { Label = "Item Id" };
-        private static readonly FishIdColumn      _fishIdColumn      = new() { Label = "G. Id" };
+        private static readonly NameColumn        _nameColumn        = new() { Label = Localize.Text("Item Name...") };
+        private static readonly CaughtColumn      _caughtColumn      = new() { Label = Localize.Text("Log") };
+        private static readonly NextUptimeColumn  _nextUptimeColumn  = new() { Label = Localize.Text("Next Uptime") };
+        private static readonly UptimesColumn     _uptimeColumn      = new() { Label = Localize.Text("Up%") };
+        private static readonly BaitColumn        _baitColumn        = new() { Label = Localize.Text("Bait...") };
+        private static readonly AetheryteColumn   _aetheryteColumn   = new() { Label = Localize.Text("Aetheryte...") };
+        private static readonly TypeColumn        _typeColumn        = new() { Label = Localize.Text("Fish Type") };
+        private static readonly CollectibleColumn _collectibleColumn = new() { Label = Localize.Text("Coll.") };
+        private static readonly PatchColumn       _patchColumn       = new() { Label = Localize.Text("Patch") };
+        private static readonly FolkloreColumn    _folkloreColumn    = new() { Label = Localize.Text("Folklore...") };
+        private static readonly BestSpotColumn    _bestSpotColumn    = new() { Label = Localize.Text("Best Spot...") };
+        private static readonly BestZoneColumn    _bestZoneColumn    = new() { Label = Localize.Text("Best Zone...") };
+        private static readonly ItemIdColumn      _itemIdColumn      = new() { Label = Localize.Text("Item Id") };
+        private static readonly FishIdColumn      _fishIdColumn      = new() { Label = Localize.Text("G. Id") };
 
         private class FishFilterColumn : CnColumnFlags<FishFilter, ExtendedFish>
         {
@@ -108,7 +109,7 @@ public partial class Interface
             protected void SetFlagsAndNames(params FishFilter[] flags)
             {
                 SetFlags(flags);
-                SetNames(flags.Select(f => f.ToString()).ToArray());
+                SetNames(flags.Select(f => Localize.Display(f)).ToArray());
             }
 
             protected sealed override IReadOnlyList<FishFilter> Values
@@ -169,7 +170,7 @@ public partial class Interface
             {
                 Flags |= ImGuiTableColumnFlags.NoReorder;
                 SetFlags(FishFilter.AlreadyCaught, FishFilter.Uncaught, FishFilter.NotInLog);
-                SetNames("Already Caught", "Uncaught", "Not In Log");
+                SetNames(Localize.Text("Already Caught"), Localize.Text("Uncaught"), Localize.Text("Not In Log"));
             }
 
             public override float Width
@@ -224,7 +225,7 @@ public partial class Interface
             {
                 Flags |= ImGuiTableColumnFlags.DefaultSort;
                 SetFlags(FishFilter.Available, FishFilter.Unavailable, FishFilter.FishDependency);
-                SetNames("Currently Available", "Currently Unavailable", "Dependent On Other Restrictions");
+                SetNames(Localize.Text("Currently Available"), Localize.Text("Currently Unavailable"), Localize.Text("Dependent On Other Restrictions"));
             }
 
             public override float Width
@@ -281,7 +282,7 @@ public partial class Interface
         private sealed class AetheryteColumn : ColumnString<ExtendedFish>
         {
             public override string ToName(ExtendedFish item)
-                => item.Uptime.Item1.ClosestAetheryte?.Name ?? "None";
+                => item.Uptime.Item1.ClosestAetheryte?.Name ?? Localize.Text("None");
 
             public override float Width
                 => _closestAetheryteColumnWidth * ImGuiHelpers.GlobalScale;
@@ -291,7 +292,7 @@ public partial class Interface
                 var aetheryte = item.Uptime.Item1.ClosestAetheryte;
                 if (aetheryte == null)
                 {
-                    ImGui.Text("None");
+                    ImGui.Text(Localize.Text("None"));
                     return;
                 }
 
@@ -362,7 +363,7 @@ public partial class Interface
             public TypeColumn()
             {
                 SetFlags(FishFilter.SmallFish, FishFilter.BigFish, FishFilter.Spearfishing, FishFilter.OceanFish);
-                SetNames("Regular Fish", "Big Fish", "Spearfishing", "Oceanfishing");
+                SetNames(Localize.Text("Regular Fish"), Localize.Text("Big Fish"), Localize.Text("Spearfishing"), Localize.Text("Oceanfishing"));
             }
 
             public override void DrawColumn(ExtendedFish item, int _)
@@ -391,7 +392,7 @@ public partial class Interface
             public CollectibleColumn()
             {
                 SetFlags(FishFilter.Collectible, FishFilter.NotCollectible);
-                SetNames("Collectible", "Not Collectible");
+                SetNames(Localize.Text("Collectible"), Localize.Text("Not Collectible"));
             }
 
             public override float Width
@@ -436,7 +437,7 @@ public partial class Interface
             public UptimesColumn()
             {
                 SetFlags(FishFilter.TimeDependency, FishFilter.WeatherDependency, FishFilter.NoDependency);
-                SetNames("Dependent on Time of Day", "Dependent on Weather", "No Dependencies");
+                SetNames(Localize.Text("Dependent on Time of Day"), Localize.Text("Dependent on Weather"), Localize.Text("No Dependencies"));
             }
 
             public override float Width
@@ -541,7 +542,7 @@ public partial class Interface
                 => lhs.Data.FishId.CompareTo(rhs.Data.FishId);
 
             public override void DrawColumn(ExtendedFish item, int _)
-                => ImGuiUtil.RightAlign($"{item.Data.FishId}{(item.Data.IsSpearFish ? " (sf)" : string.Empty)}");
+                => ImGuiUtil.RightAlign($"{item.Data.FishId}{(item.Data.IsSpearFish ? Localize.Text(" (sf)") : string.Empty)}");
         }
 
 
@@ -575,16 +576,14 @@ public partial class Interface
     private void DrawFishTab()
     {
         using var id  = ImRaii.PushId("Fish");
-        using var tab = ImRaii.TabItem("Fish");
-        ImGuiUtil.HoverTooltip("There are plenty of fish in the sea. And the air. And the sand. And the lava. And space, for some reason.\n"
-          + " Gotta catch'em all!\n"
-          + "Enough information about fish to get you started, and for everything else there's TeamCraft!");
+        using var tab = ImRaii.TabItem(Localize.Label("Fish"));
+        ImGuiUtil.HoverTooltip(Localize.Text("There are plenty of fish in the sea. And the air. And the sand. And the lava. And space, for some reason.\n Gotta catch'em all!\nEnough information about fish to get you started, and for everything else there's TeamCraft!"));
         if (!tab)
             return;
 
         _fishTable.ExtraHeight = GatherBuddy.Config.ShowStatusLine ? ImGui.GetTextLineHeight() : 0;
         _fishTable.Draw(ImGui.GetTextLineHeightWithSpacing());
-        DrawStatusLine(_fishTable, "Fish");
+        DrawStatusLine(_fishTable, Localize.Text("Fish"));
         DrawClippy();
     }
 }

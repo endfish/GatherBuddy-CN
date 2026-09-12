@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Numerics;
 using Dalamud.Bindings.ImGui;
@@ -82,7 +82,7 @@ public partial class Interface
         var alarmData = which ? _plugin.AlarmManager.LastItemAlarm : _plugin.AlarmManager.LastFishAlarm;
         if (alarmData == null)
         {
-            ImGuiUtil.DrawDisabledButton(failureText, _headerCache.AlarmButtonSize, "Click to /gather this alarm.", true);
+            ImGuiUtil.DrawDisabledButton(failureText, _headerCache.AlarmButtonSize, Localize.Text("Click to /gather this alarm."), true);
             return;
         }
 
@@ -90,7 +90,7 @@ public partial class Interface
 
         var text = $"{(alarm.Name.Any() ? alarm.Name : alarm.Item.Name[GatherBuddy.Language])}###{(which ? "itemAlarm" : "fishAlarm")}";
         var desc =
-            $"Click to /gather this alarm.\n{loc.Name} - {loc.ClosestAetheryte?.Name ?? "None"}\n{time.Start.LocalTime}\n{time.End.LocalTime}";
+            Localize.Format("Click to /gather this alarm.\n{0} - {1}\n{2}\n{3}", loc.Name, loc.ClosestAetheryte?.Name ?? Localize.Text("None"), time.Start.LocalTime, time.End.LocalTime);
 
         if (!ImGuiUtil.DrawDisabledButton(text, _headerCache.AlarmButtonSize, desc, false))
             return;
@@ -102,10 +102,10 @@ public partial class Interface
     }
 
     private void DrawLastItemAlarm()
-        => DrawLastAlarm(true, "No Item Alarm Triggered");
+        => DrawLastAlarm(true, Localize.Text("No Item Alarm Triggered"));
 
     private void DrawLastFishAlarm()
-        => DrawLastAlarm(false, "No Fish Alarm Triggered");
+        => DrawLastAlarm(false, Localize.Text("No Fish Alarm Triggered"));
 
 
     private void DrawAlarmRow()
@@ -125,12 +125,12 @@ public partial class Interface
         if (ImGui.IsItemHovered())
         {
             using var tt = ImRaii.Tooltip();
-            ImGui.TextUnformatted("If this does not correspond to your in-game Eorzea Time, verify that your windows system time is accurate.");
-            ImGui.TextUnformatted($"Next Aldenard Ocean Routes:");
+            ImGui.TextUnformatted(Localize.Text("If this does not correspond to your in-game Eorzea Time, verify that your windows system time is accurate."));
+            ImGui.TextUnformatted(Localize.Text("Next Aldenard Ocean Routes:"));
             ImGui.BulletText($"{OceanUptime.NextOceanRoute(OceanArea.Aldenard,                              TimeStamp.UtcNow)}");
             ImGui.BulletText($"{OceanUptime.NextOceanRoute(OceanArea.Aldenard,                              TimeStamp.UtcNow.AddHours(2))}");
             ImGui.BulletText($"{OceanUptime.NextOceanRoute(OceanArea.Aldenard,                              TimeStamp.UtcNow.AddHours(4))}");
-            ImGui.TextUnformatted($"Next Othard Ocean Routes:");
+            ImGui.TextUnformatted(Localize.Text("Next Othard Ocean Routes:"));
             ImGui.BulletText($"{OceanUptime.NextOceanRoute(OceanArea.Othard, TimeStamp.UtcNow)}");
             ImGui.BulletText($"{OceanUptime.NextOceanRoute(OceanArea.Othard, TimeStamp.UtcNow.AddHours(2))}");
             ImGui.BulletText($"{OceanUptime.NextOceanRoute(OceanArea.Othard, TimeStamp.UtcNow.AddHours(4))}");
@@ -181,15 +181,15 @@ public partial class Interface
         nextHourS    -= nextHourM * RealTime.SecondsPerMinute;
         nextWeatherS -= nextWeatherM * RealTime.SecondsPerMinute;
 
-        var nextWeatherString = $"  {nextWeatherM:D2}:{nextWeatherS:D2} Min.  ";
+        var nextWeatherString = Localize.Format("  {0:D2}:{1:D2} Min.  ", nextWeatherM, nextWeatherS);
         var width = -(ImGui.CalcTextSize(nextWeatherString).X
           + (WeatherIconSize.X + ItemSpacing.X + FramePadding.X) * 3);
 
         _headerCache.UpdateCurrentTerritory();
         using var _ = ImRaii.Group();
-        DrawEorzeaTime($"ET {GatherBuddy.Time.EorzeaHourOfDay:D2}:{GatherBuddy.Time.EorzeaMinuteOfHour:D2}");
+        DrawEorzeaTime(Localize.Format("ET {0:D2}:{1:D2}", GatherBuddy.Time.EorzeaHourOfDay, GatherBuddy.Time.EorzeaMinuteOfHour));
         ImGui.SameLine();
-        DrawNextEorzeaHour($"{nextHourM:D2}:{nextHourS:D2} Min to next hour.", new Vector2(width, WeatherIconSize.Y));
+        DrawNextEorzeaHour(Localize.Format("{0:D2}:{1:D2} Min to next hour.", nextHourM, nextHourS), new Vector2(width, WeatherIconSize.Y));
         ImGui.SameLine();
         DrawNextWeather(nextWeatherString);
     }

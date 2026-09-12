@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using Dalamud.Interface.Textures;
 using GatherBuddy.Classes;
 using GatherBuddy.Enums;
@@ -38,8 +38,8 @@ public partial class Interface
                 : data.NodeList.First().Folklore;
             Uptimes = data.NodeType switch
             {
-                NodeType.Regular => "Always",
-                NodeType.Unknown => "Unknown",
+                NodeType.Regular => Localize.Text("Always"),
+                NodeType.Unknown => Localize.Text("Unknown"),
                 _                => data.NodeList.Select(n => n.Times).Aggregate(BitfieldUptime.Combine).PrintHours(true),
             };
             Level     = Data.LevelString();
@@ -49,13 +49,13 @@ public partial class Interface
 
             Expansion = data.ExpansionIdx switch
             {
-                0 => "ARR",
-                1 => "HW",
-                2 => "SB",
-                3 => "ShB",
-                4 => "EW",
-                5 => "DT",
-                _ => "Unk",
+                0 => Localize.Text("ARR"),
+                1 => Localize.Text("HW"),
+                2 => Localize.Text("SB"),
+                3 => Localize.Text("ShB"),
+                4 => Localize.Text("EW"),
+                5 => Localize.Text("DT"),
+                _ => Localize.Text("Unk"),
             };
             Aetherytes = string.Join("\n",
                 data.NodeList.Where(n => n.ClosestAetheryte != null).Select(n => n.ClosestAetheryte!.Name).Distinct());

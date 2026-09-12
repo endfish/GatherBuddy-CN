@@ -20,8 +20,8 @@ public partial class Configuration : IPluginConfiguration
     public string FisherSetName   { get; set; } = "Fisher";
 
     // formats
-    public string IdentifiedGatherableFormat { get; set; } = DefaultIdentifiedGatherableFormat;
-    public string AlarmFormat                { get; set; } = DefaultAlarmFormat;
+    public string IdentifiedGatherableFormat { get; set; } = Localize.Text(DefaultIdentifiedGatherableFormat);
+    public string AlarmFormat                { get; set; } = Localize.Text(DefaultAlarmFormat);
 
 
     // Interface
@@ -145,12 +145,24 @@ public partial class Configuration : IPluginConfiguration
             config.AddColors();
             config.Migrate4To5();
             config.Migrate5To6();
+            config.MigrateChineseDefaults();
             return config;
         }
 
         config = new Configuration();
         config.Save();
         return config;
+    }
+
+    private void MigrateChineseDefaults()
+    {
+        var identified = global::GatherBuddy.Localization.MessageTemplates.MigrateDefault(IdentifiedGatherableFormat, DefaultIdentifiedGatherableFormat);
+        var alarm = global::GatherBuddy.Localization.MessageTemplates.MigrateDefault(AlarmFormat, DefaultAlarmFormat);
+        if (identified == IdentifiedGatherableFormat && alarm == AlarmFormat)
+            return;
+        IdentifiedGatherableFormat = identified;
+        AlarmFormat = alarm;
+        Save();
     }
 
     public void Migrate4To5()

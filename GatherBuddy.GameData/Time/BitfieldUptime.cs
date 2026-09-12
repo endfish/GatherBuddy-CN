@@ -142,7 +142,7 @@ public readonly struct BitfieldUptime : IEquatable<BitfieldUptime>
         if (hours != null)
         {
             var (start, end) = hours.Value;
-            return simple ? $"{start:D2}-{end:D2}" : $"{start:D2}:00 - {end:D2}:00 ET";
+            return simple ? $"{start:D2}-{end:D2}" : Localize.Format("{0:D2}:00 - {1:D2}:00 ET", start, end);
         }
 
         void AddString()
@@ -158,15 +158,15 @@ public readonly struct BitfieldUptime : IEquatable<BitfieldUptime>
                 }
                 else
                 {
-                    ret =  ret.Replace(" and ", ", ");
-                    ret += " and ";
+                    ret =  ret.Replace(Localize.Text(" and "), ", ");
+                    ret += Localize.Text(" and ");
                 }
             }
 
             if (simple)
                 ret += $"{min:D2}-{max + 1:D2}";
             else
-                ret += $"{min:D2}:00 - {max + 1:D2}:00 ET";
+                ret += Localize.Format("{0:D2}:00 - {1:D2}:00 ET", min, max + 1);
 
             min = -1;
             max = -1;

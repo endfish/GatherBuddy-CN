@@ -15,7 +15,7 @@ namespace GatherBuddy.Gui;
 
 public partial class Interface
 {
-    private sealed class ItemTable : Table<ExtendedGatherable>, IDisposable
+    private sealed class ItemTable : CnTable<ExtendedGatherable>, IDisposable
     {
         private static float _nameColumnWidth;
         private static float _nextUptimeColumnWidth;
@@ -34,19 +34,20 @@ public partial class Interface
 
         protected override void PreDraw()
         {
+            base.PreDraw();
             if (ImGuiHelpers.GlobalScale != _globalScale)
             {
                 _globalScale     = ImGuiHelpers.GlobalScale;
                 _nameColumnWidth = (Items.Max(i => TextWidth(i.Data.Name[GatherBuddy.Language])) + ItemSpacing.X + LineIconSize.X) / Scale;
-                _nextUptimeColumnWidth = Math.Max(TextWidth("99:99 Minutes") / Scale,
+                _nextUptimeColumnWidth = Math.Max(TextWidth(Localize.Text("99:99 Minutes")) / Scale,
                     TextWidth(_nextUptimeColumn.Label) / Scale + Table.ArrowWidth);
                 _closestAetheryteColumnWidth = GatherBuddy.GameData.Aetherytes.Values.Max(a => TextWidth(a.Name)) / Scale;
                 _levelColumnWidth = Math.Max(TextWidth("99*****") / Scale,
                     TextWidth(_levelColumn.Label) / Scale + Table.ArrowWidth);
                 _jobColumnWidth = Math.Max(TextWidth(_jobColumn.Label) / Scale + Table.ArrowWidth,
-                    Enum.GetNames<GatheringType>().Where(s => s != "Spearfishing").Max(TextWidth) / Scale);
+                    Localize.EnumNames<GatheringType>().Where(s => s != "Spearfishing").Max(TextWidth) / Scale);
                 _typeColumnWidth = Math.Max(TextWidth(_typeColumn.Label) / Scale + Table.ArrowWidth,
-                    Enum.GetNames<NodeType>().Max(TextWidth) / Scale);
+                    Localize.EnumNames<NodeType>().Max(TextWidth) / Scale);
                 _expansionColumnWidth   = TextWidth(_expansionColumn.Label) / Scale + Table.ArrowWidth;
                 _folkloreColumnWidth    = Items.Max(i => TextWidth(i.Folklore)) / Scale;
                 _uptimeColumnWidth      = Items.Max(i => TextWidth(i.Uptimes)) / Scale;
@@ -57,19 +58,19 @@ public partial class Interface
             }
         }
 
-        private static readonly NameColumn        _nameColumn        = new() { Label = "Item Name..." };
-        private static readonly NextUptimeColumn  _nextUptimeColumn  = new() { Label = "Next Uptime" };
-        private static readonly AetheryteColumn   _aetheryteColumn   = new() { Label = "Aetheryte" };
-        private static readonly LevelColumn       _levelColumn       = new() { Label = "Lvl..." };
-        private static readonly JobColumn         _jobColumn         = new() { Label = "Gathering" };
-        private static readonly TypeColumn        _typeColumn        = new() { Label = "Node Type" };
-        private static readonly ExpansionColumn   _expansionColumn   = new() { Label = "Exp." };
-        private static readonly FolkloreColumn    _folkloreColumn    = new() { Label = "Folklore" };
-        private static readonly UptimesColumn     _uptimesColumn     = new() { Label = "Uptimes" };
-        private static readonly BestNodeColumn    _bestNodeColumn    = new() { Label = "Best Node" };
-        private static readonly BestZoneColumn    _bestZoneColumn    = new() { Label = "Best Zone" };
-        private static readonly ItemIdColumn      _itemIdColumn      = new() { Label = "Item Id" };
-        private static readonly GatheringIdColumn _gatheringIdColumn = new() { Label = "G. Id" };
+        private static readonly NameColumn        _nameColumn        = new() { Label = Localize.Text("Item Name...") };
+        private static readonly NextUptimeColumn  _nextUptimeColumn  = new() { Label = Localize.Text("Next Uptime") };
+        private static readonly AetheryteColumn   _aetheryteColumn   = new() { Label = Localize.Text("Aetheryte") };
+        private static readonly LevelColumn       _levelColumn       = new() { Label = Localize.Text("Lvl...") };
+        private static readonly JobColumn         _jobColumn         = new() { Label = Localize.Text("Gathering") };
+        private static readonly TypeColumn        _typeColumn        = new() { Label = Localize.Text("Node Type") };
+        private static readonly ExpansionColumn   _expansionColumn   = new() { Label = Localize.Text("Exp.") };
+        private static readonly FolkloreColumn    _folkloreColumn    = new() { Label = Localize.Text("Folklore") };
+        private static readonly UptimesColumn     _uptimesColumn     = new() { Label = Localize.Text("Uptimes") };
+        private static readonly BestNodeColumn    _bestNodeColumn    = new() { Label = Localize.Text("Best Node") };
+        private static readonly BestZoneColumn    _bestZoneColumn    = new() { Label = Localize.Text("Best Zone") };
+        private static readonly ItemIdColumn      _itemIdColumn      = new() { Label = Localize.Text("Item Id") };
+        private static readonly GatheringIdColumn _gatheringIdColumn = new() { Label = Localize.Text("G. Id") };
 
         private class ItemFilterColumn : CnColumnFlags<ItemFilter, ExtendedGatherable>
         {
@@ -85,7 +86,7 @@ public partial class Interface
             protected void SetFlagsAndNames(params ItemFilter[] flags)
             {
                 SetFlags(flags);
-                SetNames(flags.Select(f => f.ToString()).ToArray());
+                SetNames(flags.Select(f => Localize.Display(f)).ToArray());
             }
 
             protected void SetNames(params string[] names)
@@ -145,7 +146,7 @@ public partial class Interface
             {
                 Flags |= ImGuiTableColumnFlags.DefaultSort;
                 SetFlags(ItemFilter.Available, ItemFilter.Unavailable);
-                SetNames("Currently Available", "Currently Unavailable");
+                SetNames(Localize.Text("Currently Available"), Localize.Text("Currently Unavailable"));
             }
 
             public override void DrawColumn(ExtendedGatherable item, int _)
@@ -166,7 +167,7 @@ public partial class Interface
         private sealed class AetheryteColumn : ColumnString<ExtendedGatherable>
         {
             public override string ToName(ExtendedGatherable item)
-                => item.Uptime.Item1.ClosestAetheryte?.Name ?? "None";
+                => item.Uptime.Item1.ClosestAetheryte?.Name ?? Localize.Text("None");
 
             public override float Width
                 => _closestAetheryteColumnWidth * ImGuiHelpers.GlobalScale;
@@ -176,7 +177,7 @@ public partial class Interface
                 var aetheryte = item.Uptime.Item1.ClosestAetheryte;
                 if (aetheryte == null)
                 {
-                    ImGui.Text("None");
+                    ImGui.Text(Localize.Text("None"));
                     return;
                 }
 
@@ -222,7 +223,7 @@ public partial class Interface
                 => SetFlagsAndNames(ItemFilter.Mining, ItemFilter.Quarrying, ItemFilter.Logging, ItemFilter.Harvesting);
 
             public override void DrawColumn(ExtendedGatherable item, int _)
-                => ImGui.Text(item.Data.GatheringType.ToString());
+                => ImGui.Text(Localize.Display(item.Data.GatheringType));
 
             public override int Compare(ExtendedGatherable lhs, ExtendedGatherable rhs)
                 => lhs.Data.GatheringType.CompareTo(rhs.Data.GatheringType);
@@ -252,7 +253,7 @@ public partial class Interface
                 => SetFlagsAndNames(ItemFilter.Regular, ItemFilter.Unspoiled, ItemFilter.Ephemeral, ItemFilter.Legendary);
 
             public override void DrawColumn(ExtendedGatherable item, int _)
-                => ImGui.Text(item.Data.NodeType.ToString());
+                => ImGui.Text(Localize.Display(item.Data.NodeType));
 
             public override int Compare(ExtendedGatherable lhs, ExtendedGatherable rhs)
                 => lhs.Data.NodeType.CompareTo(rhs.Data.NodeType);
@@ -279,7 +280,7 @@ public partial class Interface
             {
                 SetFlags(ItemFilter.ARealmReborn, ItemFilter.Heavensward, ItemFilter.Stormblood, ItemFilter.Shadowbringers,
                     ItemFilter.Endwalker, ItemFilter.Dawntrail);
-                SetNames("A Realm Reborn", "Heavensward", "Stormblood", "Shadowbringers", "Endwalker", "Dawntrail");
+                SetNames(Localize.Text("A Realm Reborn"), Localize.Text("Heavensward"), Localize.Text("Stormblood"), Localize.Text("Shadowbringers"), Localize.Text("Endwalker"), Localize.Text("Dawntrail"));
             }
 
             public override void DrawColumn(ExtendedGatherable item, int _)
@@ -427,15 +428,14 @@ public partial class Interface
     private void DrawItemTab()
     {
         using var id  = ImRaii.PushId("Gatherables");
-        using var tab = ImRaii.TabItem("Gatherables");
-        ImGuiUtil.HoverTooltip("Breaking rocks with a pickaxe or felling trees counts as gathering, why do you ask?\n"
-          + "Find all information about botanist and miner items you could ever need.");
+        using var tab = ImRaii.TabItem(Localize.Label("Gatherables"));
+        ImGuiUtil.HoverTooltip(Localize.Text("Breaking rocks with a pickaxe or felling trees counts as gathering, why do you ask?\nFind all information about botanist and miner items you could ever need."));
         if (!tab)
             return;
 
         _itemTable.ExtraHeight = GatherBuddy.Config.ShowStatusLine ? ImGui.GetTextLineHeight() : 0;
         _itemTable.Draw(ImGui.GetTextLineHeightWithSpacing());
-        DrawStatusLine(_itemTable, "Items");
+        DrawStatusLine(_itemTable, Localize.Text("Items"));
         DrawClippy();
     }
 }

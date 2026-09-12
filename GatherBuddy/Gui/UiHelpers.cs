@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -19,7 +19,7 @@ public partial class Interface
 {
     internal static bool DrawLocationInput(IGatherable item, ILocation? current, out ILocation? ret)
     {
-        const string noPreferred = "No Preferred Location";
+        string noPreferred = Localize.Text("No Preferred Location");
         var          width       = SetInputWidth * 0.85f;
         ret = current;
         if (item.Locations.Count() == 1)
@@ -90,7 +90,7 @@ public partial class Interface
         using var tt = ImRaii.Tooltip();
 
         if (uptimeDependency)
-            ImUtf8.TextFramed("Uptime Dependency"u8, 0xFF202080);
+            ImUtf8.TextFramed(Localize.Text("Uptime Dependency"), 0xFF202080);
 
         if (!displayNextWindow)
             return;
@@ -104,7 +104,7 @@ public partial class Interface
         var uptimes   = GatherBuddy.UptimeManager.GetUpcomingUptimes(item, GatherBuddy.Config.UpcomingUptimesCount);
         if (uptimes.Count <= 0)
         {
-            ImUtf8.Text($"{uptime.Start}\n{uptime.End}\n{uptime.DurationString()}\n\nLoading next {GatherBuddy.Config.UpcomingUptimesCount} windows...");
+            ImUtf8.Text(Localize.Format("{0}\n{1}\n{2}\n\nLoading next {3} windows...", uptime.Start, uptime.End, uptime.DurationString(), GatherBuddy.Config.UpcomingUptimesCount));
             return;
         }
 
@@ -115,11 +115,11 @@ public partial class Interface
         if (!table)
             return;
 
-        ImGui.TableSetupColumn("Day"u8);
-        ImGui.TableSetupColumn("Time"u8);
-        ImGui.TableSetupColumn("Starts in"u8);
-        ImGui.TableSetupColumn("Duration"u8);
-        ImGui.TableSetupColumn("Downtime"u8);
+        ImGui.TableSetupColumn(Localize.Text("Day"));
+        ImGui.TableSetupColumn(Localize.Text("Time"));
+        ImGui.TableSetupColumn(Localize.Text("Starts in"));
+        ImGui.TableSetupColumn(Localize.Text("Duration"));
+        ImGui.TableSetupColumn(Localize.Text("Downtime"));
         ImGui.TableHeadersRow();
 
         DateTime? previousStartDate = null;
@@ -131,12 +131,12 @@ public partial class Interface
             ImGui.TableNextColumn();
             if (previousStartDate is null || previousStartDate.Value.Date != startDate.Date)
             {
-                ImUtf8.Text(startDate.ToString("yyyy-MM-dd (ddd)", CultureInfo.InvariantCulture));
+                ImUtf8.Text(startDate.ToString("yyyy-MM-dd (ddd)", Localize.Culture));
                 previousStartDate = startDate;
             }
 
             ImGui.TableNextColumn();
-            ImUtf8.Text(startDate.ToString("HH:mm", CultureInfo.InvariantCulture));
+            ImUtf8.Text(startDate.ToString("HH:mm", Localize.Culture));
 
             ImGui.TableNextColumn();
             if (now < time.Start)
@@ -146,7 +146,7 @@ public partial class Interface
             }
             else
             {
-                ImUtf8.Text("Active"u8);
+                ImUtf8.Text(Localize.Text("Active"));
             }
 
             ImGui.TableNextColumn();
@@ -196,7 +196,7 @@ public partial class Interface
 
         ImGuiUtil.HoverTooltip(tooltip);
 
-        if (ImGuiUtil.DrawDisabledButton("Default", Vector2.Zero, defaultValue, defaultValue == oldValue))
+        if (ImGuiUtil.DrawDisabledButton(Localize.Label("Default"), Vector2.Zero, defaultValue, defaultValue == oldValue))
         {
             setValue(defaultValue);
             GatherBuddy.Config.Save();
@@ -215,11 +215,11 @@ public partial class Interface
         ImGui.SameLine();
         using var style = ImRaii.PushStyle(ImGuiStyleVar.ItemSpacing, Vector2.Zero);
         ImGui.NewLine();
-        ImUtf8.Text($"{table.CurrentItems} / {table.TotalItems} {name} Visible");
+        ImUtf8.Text(Localize.Format("{0} / {1} {2} Visible", table.CurrentItems, table.TotalItems, name));
         if (table.TotalColumns != table.VisibleColumns)
         {
             ImGui.SameLine(0, 50 * ImGuiHelpers.GlobalScale);
-            ImUtf8.Text($"{table.TotalColumns - table.VisibleColumns} Columns Hidden");
+            ImUtf8.Text(Localize.Format("{0} Columns Hidden", table.TotalColumns - table.VisibleColumns));
         }
 
         if (typeof(T) == typeof(ExtendedFish))
@@ -227,7 +227,7 @@ public partial class Interface
             if (File.Exists(GatherBuddy.GameData.OverrideFile))
             {
                 ImGui.SameLine(0, 50 * ImGuiHelpers.GlobalScale);
-                if (ImUtf8.SmallButton("Reimport Fish Overrides") && GatherBuddy.GameData.ReimportOverrides())
+                if (ImUtf8.SmallButton(Localize.Text("Reimport Fish Overrides")) && GatherBuddy.GameData.ReimportOverrides())
                 {
                     GatherBuddy.UptimeManager.ResetModifiedUptimes();
                     foreach (var fish in ExtendedFishList.Where(f => f.Data.HasOverridenData))
@@ -238,7 +238,7 @@ public partial class Interface
             using (var popup = ImUtf8.PopupContextItem("##Context"u8))
             {
                 if (popup)
-                    if (ImUtf8.MenuItem("Move to Backup"u8))
+                    if (ImUtf8.MenuItem(Localize.Label("Move to Backup")))
                         try
                         {
                             File.Move(GatherBuddy.GameData.OverrideFile, Path.ChangeExtension(GatherBuddy.GameData.OverrideFile, ".json.bak"),
@@ -253,15 +253,15 @@ public partial class Interface
             if (GatherBuddy.GameData.OverriddenFish > 0)
             {
                 ImGui.SameLine(0, 50 * ImGuiHelpers.GlobalScale);
-                ImUtf8.Text($"{GatherBuddy.GameData.OverriddenFish} Fish Overridden");
+                ImUtf8.Text(Localize.Format("{0} Fish Overridden", GatherBuddy.GameData.OverriddenFish));
             }
         }
     }
 
     private static void DrawClippy()
     {
-        const string popupName = "GatherClippy###ClippyPopup";
-        const string text      = "Can't find something?";
+        string popupName = Localize.Text("GatherClippy###ClippyPopup");
+        string text      = Localize.Text("Can't find something?");
         if (GatherBuddy.Config.HideClippy)
             return;
 
@@ -284,8 +284,7 @@ public partial class Interface
             GatherBuddy.Config.Save();
         }
 
-        ImGuiUtil.HoverTooltip("Click for some help navigating this table.\n"
-          + "Control + Shift + Right-Click to permanently hide this button.");
+        ImGuiUtil.HoverTooltip(Localize.Text("Click for some help navigating this table.\nControl + Shift + Right-Click to permanently hide this button."));
 
         color.Pop();
         var windowSize = new Vector2(1024 * ImGuiHelpers.GlobalScale,
@@ -298,27 +297,27 @@ public partial class Interface
             return;
 
         ImGui.BulletText(
-            "You can use text filters like \"Item Name...\" to only show entries that contain the given string. They are case-insensitive and are not stored for your next session.");
+            Localize.Text("You can use text filters like \"Item Name...\" to only show entries that contain the given string. They are case-insensitive and are not stored for your next session."));
         ImGui.BulletText(
-            "Text filters also support regular expressions, e.g. \"(blue|green)\" matches all entries that contain either blue or green.");
-        ImGui.BulletText("Button filters like \"Next Uptime\", \"Node Type\" or \"Fish Type\" allow you to filter specific types on click.");
-        ImGui.BulletText("Those filters are stored across sessions. For columns with active filters, the filter buttons are tinted red.");
+            Localize.Text("Text filters also support regular expressions, e.g. \"(blue|green)\" matches all entries that contain either blue or green."));
+        ImGui.BulletText(Localize.Text("Button filters like \"Next Uptime\", \"Node Type\" or \"Fish Type\" allow you to filter specific types on click."));
+        ImGui.BulletText(Localize.Text("Those filters are stored across sessions. For columns with active filters, the filter buttons are tinted red."));
         ImGui.NewLine();
         ImGui.BulletText(
-            "You can click in the blank space of a header to sort the table in this column, ascending or descending. This is signified with a little triangle pointing up or down.");
+            Localize.Text("You can click in the blank space of a header to sort the table in this column, ascending or descending. This is signified with a little triangle pointing up or down."));
         ImGui.BulletText(
-            "You can right-click in the blank space of a header to open the table context menu, in which you can hide columns you are not interested in.");
+            Localize.Text("You can right-click in the blank space of a header to open the table context menu, in which you can hide columns you are not interested in."));
         ImGui.BulletText(
-            "You can resize text columns by dragging the small separation markers of the column. It highlights the line in blue. Size is stored across sessions.");
+            Localize.Text("You can resize text columns by dragging the small separation markers of the column. It highlights the line in blue. Size is stored across sessions."));
         ImGui.BulletText(
-            "You can reorder most columns by left-clicking in the blank space, holding the mouse button and dragging them. Ordering is stored across sessions.");
+            Localize.Text("You can reorder most columns by left-clicking in the blank space, holding the mouse button and dragging them. Ordering is stored across sessions."));
         ImGui.NewLine();
         ImGui.BulletText(
-            "You can right-click item names and a few other columns (like bait and fishing spot) to open further context menus with object-specific options.");
-        ImGui.BulletText("You can also re-order the tabs themselves, though that is not stored across sessions.");
+            Localize.Text("You can right-click item names and a few other columns (like bait and fishing spot) to open further context menus with object-specific options."));
+        ImGui.BulletText(Localize.Text("You can also re-order the tabs themselves, though that is not stored across sessions."));
 
         ImGui.SetCursorPosY(windowSize.Y - ImGui.GetFrameHeight() - ImGui.GetStyle().WindowPadding.Y);
-        if (ImGui.Button("Understood", -Vector2.UnitX))
+        if (ImGui.Button(Localize.Label("Understood"), -Vector2.UnitX))
             ImGui.CloseCurrentPopup();
     }
 }

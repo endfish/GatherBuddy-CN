@@ -38,11 +38,11 @@ public class GatherGroupManager
     public SeString CreateHelp()
     {
         SeStringBuilder b = new();
-        b.AddText("Please use with ")
+        b.AddText(Localize.Text("Please use with "))
             .ColoredText("/gathergroup ",                      GatherBuddy.Config.SeColorCommands)
-            .ColoredText("[Name] ",                            GatherBuddy.Config.SeColorNames)
-            .ColoredText("[optional: Eorzea Minute Offset]\n", GatherBuddy.Config.SeColorArguments)
-            .AddText("Available groups are:\n");
+            .ColoredText(Localize.Text("[Name] "),                            GatherBuddy.Config.SeColorNames)
+            .ColoredText(Localize.Text("[optional: Eorzea Minute Offset]\n"), GatherBuddy.Config.SeColorArguments)
+            .AddText(Localize.Text("Available groups are:\n"));
         foreach (var value in Groups.Values)
         {
             b.ColoredText($"          {value.Name}", GatherBuddy.Config.SeColorNames)
@@ -251,10 +251,10 @@ public class GatherGroupManager
             {
                 Dalamud.Notifications.AddNotification(new Notification()
                 {
-                    Title = "GatherBuddy Error",
+                    Title = Localize.Text("GatherBuddy Error"),
                     Content =
-                        "Failed to load some gather groups. See the plugin log for more details. This is not saved, if it keeps happening you need to manually change an Gather Group to cause a save.",
-                    MinimizedText = "Failed to load gather groups.",
+                        Localize.Text("Failed to load some gather groups. See the plugin log for more details. This is not saved, if it keeps happening you need to manually change an Gather Group to cause a save."),
+                    MinimizedText = Localize.Text("Failed to load gather groups."),
                     Type          = NotificationType.Error,
                 });
             }

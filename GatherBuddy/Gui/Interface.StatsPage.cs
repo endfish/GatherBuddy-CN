@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +26,7 @@ public partial class Interface
     private                 List<FishRecord>                        _records                = [];
     private                 int                                     _selectedFishingSpotIdx = GatherBuddy.Config.FishStatsSelectedIdx;
     private                 FishingSpot                             _selectedSpot           = Locations.Values[GatherBuddy.Config.FishStatsSelectedIdx];
-    private                 ClippedSelectableCombo<FishingSpot>?    _fishingSpotCombo;
+    private                 CnClippedSelectableCombo<FishingSpot>?    _fishingSpotCombo;
 
     private static string CosmicHandler(FishingSpot spot)
     {
@@ -45,11 +45,11 @@ public partial class Interface
     {
         if (_fishingSpotCombo == null)
         {
-            // Probably use a custom FilterComboCache here.
+            // Probably use a custom CnFilterComboCache here.
             var spots = Locations.Values.ToList();
-            _fishingSpotCombo = new ClippedSelectableCombo<FishingSpot>(
+            _fishingSpotCombo = new CnClippedSelectableCombo<FishingSpot>(
                 "FishingSpotSelector",
-                "Fishing Spot",
+                Localize.Text("Fishing Spot"),
                 500,
                 spots,
                 CosmicHandler
@@ -68,7 +68,7 @@ public partial class Interface
     private void DrawCopier()
     {
         var copyStatsString = GenerateSpotReport();
-        if (ImUtf8.Button($"Copy Fish Stats for {CosmicHandler(_selectedSpot)}"))
+        if (ImUtf8.Button(Localize.FormatLabel("Copy Fish Stats for {0}", CosmicHandler(_selectedSpot))))
             ImUtf8.SetClipboardText(copyStatsString);
 
         ImUtf8.HoverTooltip(copyStatsString);
@@ -94,10 +94,10 @@ public partial class Interface
                 name    = name[..^8];
             }
 
-        sb.AppendLine($"Location: {name}");
+        sb.AppendLine(Localize.Format("Location: {0}", name.ToString()));
         if (numbers > 0)
-            sb.AppendLine($"Mission: {Missions[numbers].Name}");
-        sb.AppendLine("Collection Method: GatherBuddy Report Generator");
+            sb.AppendLine(Localize.Format("Mission: {0}", Missions[numbers].Name));
+        sb.AppendLine(Localize.Text("Collection Method: GatherBuddy Report Generator"));
         sb.AppendLine("");
 
         foreach (var baitGroup in recordsAtSpot)
@@ -105,10 +105,10 @@ public partial class Interface
             var baitRecords = baitGroup.ToList();
             var bait        = baitRecords[0].BaitId;
             var baitName = GatherBuddy.GameData.Bait.TryGetValue(bait, out var b) ? b.Name :
-                GatherBuddy.GameData.Fishes.TryGetValue(bait, out var f)          ? $"Mooch - {new Bait(f.ItemData).Name}" : Bait.Unknown.Name;
+                GatherBuddy.GameData.Fishes.TryGetValue(bait, out var f)          ? Localize.Format("Mooch - {0}", new Bait(f.ItemData).Name) : Bait.Unknown.Name;
 
             // Bait Name
-            sb.AppendLine($"Bait: {baitName}");
+            sb.AppendLine(Localize.Format("Bait: {0}", baitName));
 
             var fishIdToIndex = _selectedSpot.Items
                 .Select((fish, index) => new { fish.FishId, index })
@@ -131,7 +131,7 @@ public partial class Interface
 
                 if (count == 0)
                 {
-                    sb.AppendLine($"{fish.Name}:\n- (0 Caught)");
+                    sb.AppendLine(Localize.Format("{0}:\n- (0 Caught)", fish.Name));
                     continue;
                 }
 
@@ -145,7 +145,7 @@ public partial class Interface
 
                     if (timeRecords.Count == 0)
                     {
-                        sb.AppendLine("- No valid time data.");
+                        sb.AppendLine(Localize.Text("- No valid time data."));
                     }
                     else
                     {
@@ -155,9 +155,9 @@ public partial class Interface
                         var lureRecords = timeRecords.Where(r => r.Flags.HasFlag(Effects.ValidLure)).ToList();
                         var isMinLure   = lureRecords.Count != 0 && lureRecords.Min(r => r.Bite) / 1000f == minTime;
 
-                        var timeLine = $"- Times: {minTime} - {maxTime} ({timeRecords.Count} caught)";
+                        var timeLine = Localize.Format("- Times: {0} - {1} ({2} caught)", minTime, maxTime, timeRecords.Count);
                         if (isMinLure)
-                            timeLine += " (Lure Min!)";
+                            timeLine += Localize.Text(" (Lure Min!)");
 
                         sb.AppendLine(timeLine);
                     }
@@ -187,21 +187,21 @@ public partial class Interface
 
                     var normal = Classify(
                         fishRecords.Where(r => !r.Flags.HasFlag(Effects.Large) && !r.Flags.HasFlag(Effects.BigGameFishing)),
-                        "Average");
+                        Localize.Text("Standard Size"));
 
                     var large = Classify(
                         fishRecords.Where(r => r.Flags.HasFlag(Effects.Large) && !r.Flags.HasFlag(Effects.BigGameFishing)),
-                        "Large");
+                        Localize.Text("Large"));
 
                     var bgf = Classify(
                         fishRecords.Where(r => r.Flags.HasFlag(Effects.BigGameFishing)),
-                        "BGF");
+                        Localize.Text("BGF"));
 
 
                     string Format((string label, List<ushort> sizes, Dictionary<Effects, int> effects, int count) group)
                     {
                         if (group.sizes.Count == 0)
-                            return $"No {group.label} Fish";
+                            return Localize.Format("No {0} Fish", group.label);
 
                         var min = group.sizes.Min() / 10f;
                         var max = group.sizes.Max() / 10f;
@@ -209,7 +209,7 @@ public partial class Interface
                         var effectText = string.Join(", ",
                             filterFlags
                                 .Where(f => group.effects[f] > 0)
-                                .Select(f => $"{f}: {group.effects[f]}"));
+                                .Select(f => $"{Localize.Display(f)}: {group.effects[f]}"));
 
                         return $"{min} - {max} ({group.count}" + (effectText != "" ? $" | [{effectText}])" : ")");
                     }
@@ -221,7 +221,7 @@ public partial class Interface
                         Format(bgf),
                     };
 
-                    sb.AppendLine("- Sizes: " + string.Join(" | ", sizeParts));
+                    sb.AppendLine(Localize.Text("- Sizes: ") + string.Join(" | ", sizeParts));
                 }
 
                 if (GatherBuddy.Config.EnableReportMulti)
@@ -234,9 +234,9 @@ public partial class Interface
 
                     var hookLine = new List<string>();
                     if (doubleHook > 0)
-                        hookLine.Add($"Double Hook Yield: {doubleHook}");
+                        hookLine.Add(Localize.Format("Double Hook Yield: {0}", doubleHook));
                     if (tripleHook > 0)
-                        hookLine.Add($"Triple Hook Yield: {tripleHook}");
+                        hookLine.Add(Localize.Format("Triple Hook Yield: {0}", tripleHook));
 
                     if (hookLine.Count != 0)
                         sb.AppendLine($"- {string.Join(" | ", hookLine)}");
@@ -246,30 +246,30 @@ public partial class Interface
             sb.AppendLine("");
         }
 
-        return sb.ToString().TrimEnd();
+        return Localize.Display(sb).TrimEnd();
     }
 
     private void DrawFishingSpotInfo()
     {
-        ImUtf8.Text($"Coordinates: ({_selectedSpot.IntegralXCoord}, {_selectedSpot.IntegralYCoord})");
-        ImUtf8.Text($"Territory: {_selectedSpot.Territory.Name}");
+        ImUtf8.Text(Localize.Format("Coordinates: ({0}, {1})", _selectedSpot.IntegralXCoord, _selectedSpot.IntegralYCoord));
+        ImUtf8.Text(Localize.Format("Territory: {0}", _selectedSpot.Territory.Name));
         ImGui.Separator();
 
         if (_selectedSpot.ClosestAetheryte != null)
-            ImUtf8.Text($"Closest Aetheryte: {_selectedSpot.ClosestAetheryte.Name}");
+            ImUtf8.Text(Localize.Format("Closest Aetheryte: {0}", _selectedSpot.ClosestAetheryte.Name));
         else
-            ImUtf8.Text("No Aetheryte found nearby.");
+            ImUtf8.Text(Localize.Text("No Aetheryte found nearby."));
         ImGui.Separator();
 
         if (_selectedSpot.Items.Any())
         {
-            ImUtf8.Text("Available Fish:");
+            ImUtf8.Text(Localize.Text("Available Fish:"));
             foreach (var fish in _selectedSpot.Items)
                 ImUtf8.Text("- " + fish.Name[GatherBuddy.Language]);
         }
         else
         {
-            ImUtf8.Text("No fish available.");
+            ImUtf8.Text(Localize.Text("No fish available."));
         }
     }
 
@@ -307,7 +307,7 @@ public partial class Interface
             foreach (var (baitId, entries) in baitGroups)
             {
                 var bait = GatherBuddy.GameData.Bait.GetValueOrDefault(baitId);
-                ImUtf8.BulletText($"Bait: {bait?.Name ?? "Unknown"}");
+                ImUtf8.BulletText(Localize.Format("Bait: {0}", bait?.Name ?? Localize.Text("Unknown")));
 
                 DrawAmountCaught(entries.Count);
                 DrawCatchPercentage(entries, recordsAtSpot.Count(r => r.BaitId == baitId));
@@ -429,8 +429,8 @@ public partial class Interface
 
         // Titles
         drawList.AddText(new Vector2(cursor.X + leftMargin + chartWidth * 0.5f - 20f, origin.Y + 20f), ImGui.GetColorU32(ImGuiCol.Text),
-            "Size");
-        drawList.AddText(ImGui.GetFont(), ImGui.GetFontSize(), new Vector2(cursor.X + 5f, cursor.Y), ImGui.GetColorU32(ImGuiCol.Text), "Count");
+            Localize.Text("Size"));
+        drawList.AddText(ImGui.GetFont(), ImGui.GetFontSize(), new Vector2(cursor.X + 5f, cursor.Y), ImGui.GetColorU32(ImGuiCol.Text), Localize.Text("Count"));
 
         // Legend
         var legendX = origin.X + chartWidth + 10f;
@@ -440,9 +440,9 @@ public partial class Interface
             var sizeName =
                 new List<string>
                 {
-                    "Average",
-                    "Large",
-                    "Big Game Fishing",
+                    Localize.Text("Standard Size"),
+                    Localize.Text("Large"),
+                    Localize.Text("Big Game Fishing"),
                 }[i];
             var label = $"{sizeName}";
             drawList.AddRectFilled(new Vector2(legendX, legendY), new Vector2(legendX + textHeight, legendY + textHeight),
@@ -457,13 +457,13 @@ public partial class Interface
 
     private static void DrawAmountCaught(int count)
     {
-        ImUtf8.Text($"Caught: {count} times");
+        ImUtf8.Text(Localize.Format("Caught: {0} times", count));
     }
 
     private static void DrawCatchPercentage(List<FishRecord> entries, int baitTotal)
     {
         var percentage = entries.Count / (float)baitTotal * 100f;
-        ImUtf8.Text($"Percent of baited catches: {percentage:F2}");
+        ImUtf8.Text(Localize.Format("Percent of baited catches: {0:F2}", percentage));
     }
 
     private static void DrawBiteTimeHistogram(List<FishRecord> entries)
@@ -713,8 +713,8 @@ public partial class Interface
 
         // Titles
         drawList.AddText(new Vector2(cursor.X + leftMargin + chartWidth * 0.5f - 20f, origin.Y + 20f), ImGui.GetColorU32(ImGuiCol.Text),
-            "Bite Time");
-        drawList.AddText(ImGui.GetFont(), ImGui.GetFontSize(), new Vector2(cursor.X + 5f, cursor.Y), ImGui.GetColorU32(ImGuiCol.Text), "Count");
+            Localize.Text("Bite Time"));
+        drawList.AddText(ImGui.GetFont(), ImGui.GetFontSize(), new Vector2(cursor.X + 5f, cursor.Y), ImGui.GetColorU32(ImGuiCol.Text), Localize.Text("Count"));
 
         // Legend
         var legendX = origin.X + chartWidth + 10f;
@@ -735,13 +735,13 @@ public partial class Interface
             var baitName =
                 new List<string>
                 {
-                    "Chum",
-                    "AmbitiousLure1",
-                    "AmbitiousLure2",
-                    "AmbitiousLure3",
-                    "ModestLure1",
-                    "ModestLure2",
-                    "ModestLure3",
+                    Localize.Text("Chum"),
+                    Localize.Text("AmbitiousLure1"),
+                    Localize.Text("AmbitiousLure2"),
+                    Localize.Text("AmbitiousLure3"),
+                    Localize.Text("ModestLure1"),
+                    Localize.Text("ModestLure2"),
+                    Localize.Text("ModestLure3"),
                 }[k];
             var label = $"{baitName}";
             if (k == 0)
@@ -766,8 +766,8 @@ public partial class Interface
 
         _records = _plugin.FishRecorder.Records;
         using var id  = ImUtf8.PushId("Fishing Spots Stats"u8);
-        using var tab = ImUtf8.TabItem("Fishing Spots Stats"u8);
-        ImUtf8.HoverTooltip("Aggregator of Fish Record data in a presentable format"u8);
+        using var tab = ImUtf8.TabItem(Localize.Label("Fishing Spots Stats"));
+        ImUtf8.HoverTooltip(Localize.Text("Aggregator of Fish Record data in a presentable format"));
 
         if (!tab)
             return;

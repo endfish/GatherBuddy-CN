@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
@@ -51,11 +51,11 @@ internal static class SeStringBuilderExtension
     public static SeStringBuilder DelayString(this SeStringBuilder builder, TimeInterval uptime)
     {
         if (uptime.Start > GatherBuddy.Time.ServerTime)
-            return builder.AddText("will be up in ")
+            return builder.AddText(Localize.Text("will be up in "))
                 .AddColoredText(TimeInterval.DurationString(uptime.Start, GatherBuddy.Time.ServerTime, false),
                     GatherBuddy.Config.SeColorArguments);
 
-        return builder.AddText("will be up for the next ")
+        return builder.AddText(Localize.Text("will be up for the next "))
             .AddColoredText(TimeInterval.DurationString(uptime.End, GatherBuddy.Time.ServerTime, false), GatherBuddy.Config.SeColorArguments);
     }
 }
@@ -110,13 +110,13 @@ public static class Communicator
     {
         if (e != null)
         {
-            name = name.Length > 0 ? name : "<Unnamed>";
+            name = name.Length > 0 ? name : Localize.Text("<Unnamed>");
             GatherBuddy.Log.Error($"Could not save {objectType}{name} to Clipboard:\n{e}");
-            PrintError($"Could not save {objectType}", name, GatherBuddy.Config.SeColorNames, " to Clipboard.");
+            PrintError(Localize.Format("Could not save {0}", objectType), name, GatherBuddy.Config.SeColorNames, Localize.Text(" to Clipboard."));
         }
         else if (GatherBuddy.Config.PrintClipboardMessages)
         {
-            Print(objectType, name.Length > 0 ? name : "<Unnamed>", GatherBuddy.Config.SeColorNames, " saved to Clipboard.");
+            Print(objectType, name.Length > 0 ? name : Localize.Text("<Unnamed>"), GatherBuddy.Config.SeColorNames, Localize.Text(" saved to Clipboard."));
         }
     }
 
@@ -129,10 +129,10 @@ public static class Communicator
             return;
 
         if (uptime.Start > GatherBuddy.Time.ServerTime)
-            Print("Next up in ",                     TimeInterval.DurationString(uptime.Start, GatherBuddy.Time.ServerTime, false),
+            Print(Localize.Text("Next up in "),                     TimeInterval.DurationString(uptime.Start, GatherBuddy.Time.ServerTime, false),
                 GatherBuddy.Config.SeColorArguments, ".");
         else
-            Print("Currently up for the next ",      TimeInterval.DurationString(uptime.End, GatherBuddy.Time.ServerTime, false),
+            Print(Localize.Text("Currently up for the next "),      TimeInterval.DurationString(uptime.End, GatherBuddy.Time.ServerTime, false),
                 GatherBuddy.Config.SeColorArguments, ".");
     }
 
@@ -177,7 +177,7 @@ public static class Communicator
     {
         if (item == null)
         {
-            Print("Could not find item corresponding to \"", name, GatherBuddy.Config.SeColorNames, "\".");
+            Print(Localize.Text("Could not find item corresponding to \""), name, GatherBuddy.Config.SeColorNames, "\".");
             GatherBuddy.Log.Verbose($"Could not find item corresponding to \"{name}\".");
             return;
         }
@@ -199,15 +199,15 @@ public static class Communicator
     public static void LocationNotFound(IGatherable? item, GatheringType? type)
     {
         SeStringBuilder sb = new();
-        sb.AddText("No associated location or attuned aetheryte found for ");
+        sb.AddText(Localize.Text("No associated location or attuned aetheryte found for "));
         if (item != null)
             sb.AddFullItemLink(item.ItemId, item.Name[GatherBuddy.Language]);
         else
-            sb.AddColoredText("Unknown", GatherBuddy.Config.SeColorNames);
+            sb.AddColoredText(Localize.Text("Unknown"), GatherBuddy.Config.SeColorNames);
 
         if (type != null)
-            sb.AddText(" with condition ")
-                .AddColoredText(type.Value.ToString(), GatherBuddy.Config.SeColorArguments);
+            sb.AddText(Localize.Text(" with condition "))
+                .AddColoredText(Localize.Display(type.Value), GatherBuddy.Config.SeColorArguments);
         sb.AddText(".");
         Print(sb.BuiltString);
         GatherBuddy.Log.Verbose(sb.BuiltString.TextValue);
@@ -215,31 +215,31 @@ public static class Communicator
 
     public static void NoItemName(string command, string itemType)
     {
-        PrintError(new SeStringBuilder().AddText($"Please supply a (partial) {itemType} name, ")
+        PrintError(new SeStringBuilder().AddText(Localize.Format("Please supply a (partial) {0} name, ", itemType))
             .AddColoredText("alarm", GatherBuddy.Config.SeColorArguments)
-            .AddText(" or ")
+            .AddText(Localize.Text(" or "))
             .AddColoredText("next", GatherBuddy.Config.SeColorArguments)
-            .AddText(" for ")
+            .AddText(Localize.Text(" for "))
             .AddColoredText(command, GatherBuddy.Config.SeColorCommands)
             .AddText(".").BuiltString);
     }
 
     public static void NoBaitFound(Bait bait)
     {
-        PrintError(new SeStringBuilder().AddText("Bait ")
+        PrintError(new SeStringBuilder().AddText(Localize.Text("Bait "))
             .AddFullItemLink(bait.Id, bait.Name)
-            .AddText(" could not be equipped because you do not carry it.").BuiltString);
+            .AddText(Localize.Text(" could not be equipped because you do not carry it.")).BuiltString);
     }
 
     public static void NoGatherGroup(string groupName)
-        => PrintError("The gather group ", groupName, GatherBuddy.Config.SeColorNames, " does not exist.");
+        => PrintError(Localize.Text("The gather group "), groupName, GatherBuddy.Config.SeColorNames, Localize.Text(" does not exist."));
 
     public static void NoGatherGroupItem(string groupName, int minute)
     {
         SeStringBuilder sb = new();
-        sb.AddText("The gather group ")
+        sb.AddText(Localize.Text("The gather group "))
             .AddColoredText(groupName, GatherBuddy.Config.SeColorNames)
-            .AddText(" has no item corresponding to the eorzea time ")
+            .AddText(Localize.Text(" has no item corresponding to the eorzea time "))
             .AddColoredText($"{minute / RealTime.MinutesPerHour:D2}:{minute % RealTime.MinutesPerHour:D2}",
                 GatherBuddy.Config.SeColorArguments)
             .AddText(".");
@@ -265,9 +265,9 @@ public static class Communicator
         SeStringBuilder NodeReplace(SeStringBuilder builder, string s)
             => s.ToLowerInvariant() switch
             {
-                "{alarm}"       => builder.AddColoredText(alarm.Name.Any() ? $"[{alarm.Name}]" : "[Alarm]", GatherBuddy.Config.SeColorNames),
+                "{alarm}"       => builder.AddColoredText(alarm.Name.Any() ? $"[{alarm.Name}]" : Localize.Text("[Alarm]"), GatherBuddy.Config.SeColorNames),
                 "{item}"        => builder.AddFullItemLink(alarm.Item.ItemId, alarm.Item.Name[GatherBuddy.Language]),
-                "{offset}"      => builder.AddText(alarm.SecondOffset.ToString()),
+                "{offset}"      => builder.AddText(Localize.Display(alarm.SecondOffset)),
                 "{delaystring}" => builder.DelayString(uptime),
                 "{location}" => builder.AddFullMapLink(location.Name, location.Territory, location.IntegralXCoord / 100f,
                     location.IntegralYCoord / 100f),

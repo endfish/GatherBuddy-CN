@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -309,10 +309,10 @@ public partial class AlarmManager : IDisposable
             {
                 Dalamud.Notifications.AddNotification(new Notification()
                 {
-                    Title = "GatherBuddy Error",
+                    Title = Localize.Text("GatherBuddy Error"),
                     Content =
-                        "Failed to load some Alarm groups. See the plugin log for more details. This is not saved, if it keeps happening you need to manually change an Alarm Group to cause a save.",
-                    MinimizedText = "Failed to load Alarm groups.",
+                        Localize.Text("Failed to load some Alarm groups. See the plugin log for more details. This is not saved, if it keeps happening you need to manually change an Alarm Group to cause a save."),
+                    MinimizedText = Localize.Text("Failed to load Alarm groups."),
                     Type          = NotificationType.Error,
                 });
             }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Dalamud.Game.Gui.ContextMenu;
 using Dalamud.Plugin.Services;
@@ -25,7 +25,7 @@ public class ContextMenu : IDisposable
             IsEnabled   = true,
             IsReturn    = false,
             PrefixChar  = 'G',
-            Name        = "Gather",
+            Name        = Localize.Text("Gather"),
             OnClicked   = OnClick,
             IsSubmenu   = false,
             PrefixColor = 42,

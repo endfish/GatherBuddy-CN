@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Numerics;
 using Dalamud.Bindings.ImGui;
@@ -88,14 +88,14 @@ public partial class FishTimerWindow : Window, IDisposable
             ColorId.FishTimerBackground.Value(), Rounding);
         ImGui.GetWindowDrawList().AddRect(_windowPos, _windowPos + _windowSize, ColorId.FishTimerMarkersAll.Value(), Rounding);
         ImGui.SetCursorPosY((_windowSize.Y - 6 * ImGui.GetTextLineHeightWithSpacing()) / 2);
-        DrawCenteredText(_windowSize.X, "FISH");
+        DrawCenteredText(_windowSize.X, Localize.Text("FISH"));
         ImGui.SetCursorPosY((_windowSize.Y - 4 * ImGui.GetTextLineHeightWithSpacing()) / 2);
-        DrawCenteredText(_windowSize.X, "TIMER");
-        DrawCenteredText(_windowSize.X, "\nDisable \"Edit Fish Timer\"");
-        DrawCenteredText(_windowSize.X, "in /gatherbuddy -> Config");
-        DrawCenteredText(_windowSize.X, "-> Interface -> Fish Timer Window");
-        DrawCenteredText(_windowSize.X, "to enable actual functionality");
-        DrawCenteredText(_windowSize.X, "and hide this when not fishing.");
+        DrawCenteredText(_windowSize.X, Localize.Text("TIMER"));
+        DrawCenteredText(_windowSize.X, Localize.Text("\nDisable \"Edit Fish Timer\""));
+        DrawCenteredText(_windowSize.X, Localize.Text("in /gatherbuddy -> Config"));
+        DrawCenteredText(_windowSize.X, Localize.Text("-> Interface -> Fish Timer Window"));
+        DrawCenteredText(_windowSize.X, Localize.Text("to enable actual functionality"));
+        DrawCenteredText(_windowSize.X, Localize.Text("and hide this when not fishing."));
     }
 
     private void DrawProgressLine()
@@ -127,7 +127,7 @@ public partial class FishTimerWindow : Window, IDisposable
             drawList.AddLine(start - scale, end - scale, 0x80000000, ImGuiHelpers.GlobalScale);
             drawList.AddLine(start,         end,         0xFFFFFFFF, ImGuiHelpers.GlobalScale);
             drawList.AddLine(start + scale, end + scale, 0x80000000, ImGuiHelpers.GlobalScale);
-            var t = Math.Round(i * (double)time / 1000, GatherBuddy.Config.SecondIntervalsRounding).ToString();
+            var t = Localize.Display(Math.Round(i * (double)time / 1000, GatherBuddy.Config.SecondIntervalsRounding));
             ImGuiUtil.TextShadowed(ImGui.GetWindowDrawList(), end with { X = end.X - ImGui.CalcTextSize(t).X / 2 }, t, 0xFFFFFFFF, 0x80000000);
         }
     }
@@ -148,7 +148,7 @@ public partial class FishTimerWindow : Window, IDisposable
         {
             case 0: return;
             case -1:
-                const string text = "Elapsed Time";
+        string text = Localize.Text("Elapsed Time");
                 ImGui.SameLine(_windowSize.X - ImGui.CalcTextSize(text).X - _textMargin);
                 ImGui.Text(text);
                 return;
@@ -179,7 +179,7 @@ public partial class FishTimerWindow : Window, IDisposable
     private string GetSpotText(FishingSpot? spot)
     {
         if (spot == null)
-            return "Unknown";
+            return Localize.Text("Unknown");
 
         var name = spot.Name.AsSpan();
         if (name.EndsWith(')'))
@@ -290,17 +290,17 @@ public partial class FishTimerWindow : Window, IDisposable
         _windowSize = new Vector2(ImGui.GetWindowSize().X, _maxListHeight);
         if (GatherBuddy.Config.FishTimerEdit)
         {
-            DrawTextHeader("Bait", "Place", -1);
+            DrawTextHeader(Localize.Text("Bait"), Localize.Text("Place"), -1);
             DrawEditModeTimer();
         }
         else
         {
             _spotName ??= GetSpotText(_spot);
-            var baitString = " (M)";
+            var baitString = Localize.Text(" (M)");
             if (GatherBuddy.GameData.Bait.ContainsKey(_recorder.Record.BaitId))
             {
                 var baitCount = CurrentBait.HasItem(_recorder.Record.Bait.Id);
-                baitString = baitCount > 999 ? " (>1k)" : $" ({baitCount})";
+                baitString = baitCount > 999 ? Localize.Text(" (>1k)") : $" ({baitCount})";
             }
 
             DrawTextHeader(_recorder.Record.Bait.Name + baitString, _spotName, _milliseconds);
