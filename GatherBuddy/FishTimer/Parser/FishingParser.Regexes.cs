@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Text.RegularExpressions;
 using Dalamud.Game;
+using GatherBuddy.Utility;
 
 namespace GatherBuddy.FishTimer.Parser;
 
@@ -22,11 +23,20 @@ public partial class FishingParser
                 ClientLanguage.German   => German.Value,
                 ClientLanguage.French   => French.Value,
                 ClientLanguage.Japanese => Japanese.Value,
+                MultiString.ChineseLanguage => Chinese.Value,
                 _                       => throw new InvalidEnumArgumentException(),
             };
         }
 
         // @formatter:off
+
+        private static readonly Lazy<Regexes> Chinese = new(() => new Regexes
+        {
+            Cast = new Regex(ChineseFishingMessages.Cast, RegexOptions.Compiled | RegexOptions.NonBacktracking | RegexOptions.ExplicitCapture),
+            AreaDiscovered = new Regex(ChineseFishingMessages.AreaDiscovered, RegexOptions.Compiled | RegexOptions.NonBacktracking | RegexOptions.ExplicitCapture),
+            Mooch = new Regex(ChineseFishingMessages.Mooch, RegexOptions.Compiled | RegexOptions.NonBacktracking | RegexOptions.ExplicitCapture),
+            Undiscovered = ChineseFishingMessages.Undiscovered,
+        });
 
 
         private static readonly Lazy<Regexes> English = new( () => new Regexes

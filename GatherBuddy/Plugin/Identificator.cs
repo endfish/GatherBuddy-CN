@@ -3,6 +3,7 @@ using GatherBuddy.Classes;
 using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Linq;
+using GatherBuddy.Utility;
 
 namespace GatherBuddy.Plugin;
 
@@ -20,10 +21,12 @@ public class Identificator
         var languages = new[]
         {
             GatherBuddy.Language,
-            (ClientLanguage)(((int)GatherBuddy.Language + 1) % 4),
-            (ClientLanguage)(((int)GatherBuddy.Language + 2) % 4),
-            (ClientLanguage)(((int)GatherBuddy.Language + 3) % 4),
-        };
+            MultiString.ChineseLanguage,
+            ClientLanguage.English,
+            ClientLanguage.Japanese,
+            ClientLanguage.German,
+            ClientLanguage.French,
+        }.Distinct().ToArray();
 
         _gatherableFromLanguage = languages.Select(CreateGatherableDictionary).ToArray();
         _fishFromLanguage       = languages.Select(CreateFishDictionary).ToArray();
@@ -34,6 +37,8 @@ public class Identificator
         var dict = new Dictionary<string, Gatherable>(_data.Gatherables.Count);
         foreach (var (gatherable, name) in _data.Gatherables.Values.Select(g => (g, g.Name[l].ToLowerInvariant())))
         {
+            if (string.IsNullOrWhiteSpace(name))
+                continue;
             if (!dict.TryAdd(name, gatherable))
             {
                 for (var i = 2; i < 10; ++i)
@@ -52,6 +57,8 @@ public class Identificator
         var dict = new Dictionary<string, Fish>(_data.Fishes.Count);
         foreach (var (fish, name) in _data.Fishes.Values.Select(f => (f, f.Name[l].ToLowerInvariant())))
         {
+            if (string.IsNullOrWhiteSpace(name))
+                continue;
             if (!dict.TryAdd(name, fish))
             {
                 for (var i = 2; i < 10; ++i)

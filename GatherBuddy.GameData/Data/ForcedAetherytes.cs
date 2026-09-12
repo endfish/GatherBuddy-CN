@@ -29,7 +29,10 @@ public static class ForcedAetherytes
         var sheet = data.DataManager.GetExcelSheet<TerritoryType>();
         foreach (var (zoneId, aetheryteId) in ZonesWithoutAetherytes)
         {
-            var territoryType = sheet.GetRow(zoneId);
+            var territoryType = sheet.GetRowOrDefault(zoneId);
+            // Upstream can reference territories not yet present in the CN client.
+            if (territoryType is null)
+                continue;
             var territory     = data.FindOrAddTerritory(territoryType);
             if (territory == null)
             {
