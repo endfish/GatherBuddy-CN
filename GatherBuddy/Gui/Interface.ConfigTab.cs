@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Numerics;
 using Dalamud.Bindings.ImGui;
 using Dalamud.Game.Text;
@@ -41,7 +41,7 @@ public partial class Interface
         private static void DrawChatTypeSelector(string label, string description, XivChatType currentValue, Action<XivChatType> setter)
         {
             ImGui.SetNextItemWidth(SetInputWidth);
-            if (Widget.DrawChatTypeSelector(label, description, currentValue, setter))
+            if (CnWidget.DrawChatTypeSelector(label, description, currentValue, setter))
                 GatherBuddy.Config.Save();
         }
 
@@ -503,7 +503,7 @@ public partial class Interface
                 return;
 
             ImGui.SetNextItemWidth(SetInputWidth);
-            Widget.KeySelector("Hotkey to Hold", "Set the hotkey to hold to keep the window visible.",
+            CnWidget.KeySelector("Hotkey to Hold", "Set the hotkey to hold to keep the window visible.",
                 GatherBuddy.Config.GatherWindowHoldKey,
                 k => GatherBuddy.Config.GatherWindowHoldKey = k, Configuration.ValidKeys);
         }
@@ -516,14 +516,14 @@ public partial class Interface
 
         public static void DrawGatherWindowHotkeyInput()
         {
-            if (Widget.ModifiableKeySelector("Hotkey to Open Gather Window", "Set a hotkey to open the Gather Window.", SetInputWidth,
+            if (CnWidget.ModifiableKeySelector("Hotkey to Open Gather Window", "Set a hotkey to open the Gather Window.", SetInputWidth,
                     GatherBuddy.Config.GatherWindowHotkey, k => GatherBuddy.Config.GatherWindowHotkey = k, Configuration.ValidKeys))
                 GatherBuddy.Config.Save();
         }
 
         public static void DrawMainInterfaceHotkeyInput()
         {
-            if (Widget.ModifiableKeySelector("Hotkey to Open Main Interface", "Set a hotkey to open the main GatherBuddy interface.",
+            if (CnWidget.ModifiableKeySelector("Hotkey to Open Main Interface", "Set a hotkey to open the main GatherBuddy interface.",
                     SetInputWidth,
                     GatherBuddy.Config.MainInterfaceHotkey, k => GatherBuddy.Config.MainInterfaceHotkey = k, Configuration.ValidKeys))
                 GatherBuddy.Config.Save();
@@ -533,7 +533,7 @@ public partial class Interface
         public static void DrawGatherWindowDeleteModifierInput()
         {
             ImGui.SetNextItemWidth(SetInputWidth);
-            if (Widget.ModifierSelector("Modifier to Delete Items on Right-Click",
+            if (CnWidget.ModifierSelector("Modifier to Delete Items on Right-Click",
                     "Set the modifier key to be used while right-clicking items in the gather window to delete them.",
                     GatherBuddy.Config.GatherWindowDeleteModifier, k => GatherBuddy.Config.GatherWindowDeleteModifier = k))
                 GatherBuddy.Config.Save();

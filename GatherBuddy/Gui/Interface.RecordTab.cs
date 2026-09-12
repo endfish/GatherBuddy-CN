@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -231,7 +231,7 @@ public partial class Interface
             None      = 0x10,
         }
 
-        private sealed class BiteTypeHeader : ColumnFlags<TugTypeFilter, FishRecord>
+        private sealed class BiteTypeHeader : CnColumnFlags<TugTypeFilter, FishRecord>
         {
             public BiteTypeHeader()
             {
@@ -285,7 +285,7 @@ public partial class Interface
             None     = 0x80,
         }
 
-        private sealed class HookHeader : ColumnFlags<HookSetFilter, FishRecord>
+        private sealed class HookHeader : CnColumnFlags<HookSetFilter, FishRecord>
         {
             public HookHeader()
             {
@@ -351,7 +351,7 @@ public partial class Interface
                 => lhs.Bite.CompareTo(rhs.Bite);
         }
 
-        private class FlagHeader : TriStateColumnFlags<FlagHeader.ColumnEffects, FishRecord>
+        private class FlagHeader : CnTriStateColumnFlags<FlagHeader.ColumnEffects, FishRecord>
         {
             private          float                                           _iconScale;
             private readonly (ISharedImmediateTexture, FishRecord.Effects)[] _effects;

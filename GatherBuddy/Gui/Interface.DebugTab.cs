@@ -1,4 +1,4 @@
-﻿using Dalamud.Bindings.ImGui;
+using Dalamud.Bindings.ImGui;
 using Dalamud.Game;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using GatherBuddy.Classes;
@@ -581,14 +581,14 @@ public partial class Interface
     }
 
     private class TerritoryFilterCombo()
-        : FilterComboCache<Territory>(() => GatherBuddy.GameData.Territories.Values.ToList(), MouseWheelType.Control, GatherBuddy.Log)
+        : CnFilterComboCache<Territory>(() => GatherBuddy.GameData.Territories.Values.ToList(), MouseWheelType.Control, GatherBuddy.Log)
     {
         protected override string ToString(Territory obj)
             => $"{obj.Name} ({obj.Id})";
     }
 
     private class WeatherFilterCombo()
-        : FilterComboCache<string>(() => GatherBuddy.GameData.Weathers.Values.Select(w => w.Name).Distinct().ToList(), MouseWheelType.Control,
+        : CnFilterComboCache<string>(() => GatherBuddy.GameData.Weathers.Values.Select(w => w.Name).Distinct().ToList(), MouseWheelType.Control,
             GatherBuddy.Log)
     {
         protected override string ToString(string obj)
@@ -596,7 +596,7 @@ public partial class Interface
     }
 
     private class FishBaitCombo()
-        : FilterComboCache<FishBaitCombo.StringId>(
+        : CnFilterComboCache<FishBaitCombo.StringId>(
             () => GatherBuddy.GameData.Fishes.Values.Select(f => new StringId(f.Name.English, f.ItemId, true))
                 .Concat(GatherBuddy.GameData.Bait.Values.Select(b => new StringId(b.Name, b.Id, false))).ToList(), MouseWheelType.Control,
             GatherBuddy.Log)

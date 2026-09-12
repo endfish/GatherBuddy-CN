@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Dalamud.Bindings.ImGui;
@@ -91,7 +91,7 @@ public partial class Interface
         private static readonly ItemIdColumn      _itemIdColumn      = new() { Label = "Item Id" };
         private static readonly FishIdColumn      _fishIdColumn      = new() { Label = "G. Id" };
 
-        private class FishFilterColumn : ColumnFlags<FishFilter, ExtendedFish>
+        private class FishFilterColumn : CnColumnFlags<FishFilter, ExtendedFish>
         {
             private FishFilter[] FlagValues = Array.Empty<FishFilter>();
             private string[]     FlagNames  = Array.Empty<string>();
@@ -310,7 +310,7 @@ public partial class Interface
             }
         }
 
-        private sealed class PatchColumn : ColumnFlags<PatchFlag, ExtendedFish>
+        private sealed class PatchColumn : CnColumnFlags<PatchFlag, ExtendedFish>
         {
             public PatchColumn()
                 => AllFlags = Enum.GetValues<PatchFlag>().Aggregate((l, r) => l | r);

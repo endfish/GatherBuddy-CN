@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Numerics;
 using Dalamud.Bindings.ImGui;
 using Dalamud.Interface;
@@ -31,7 +31,7 @@ public partial class Interface
 
     private class GatherWindowCache
     {
-        public class GatherWindowSelector : ItemSelector<GatherWindowPreset>
+        public class GatherWindowSelector : CnItemSelector<GatherWindowPreset>
         {
             public GatherWindowSelector()
                 : base(_plugin.GatherWindowManager.Presets, Flags.All)

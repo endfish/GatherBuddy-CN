@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using GatherBuddy.Interfaces;
 using GatherBuddy.Time;
@@ -38,7 +38,7 @@ public partial class Interface
 
     private class GatherGroupCache
     {
-        public sealed class GatherGroupSelector : ItemSelector<TimedGroup>
+        public sealed class GatherGroupSelector : CnItemSelector<TimedGroup>
         {
             private readonly GatherGroupManager _manager;
 
@@ -114,7 +114,7 @@ public partial class Interface
             .OrderBy(g => g.Name[GatherBuddy.Language])
             .ToArray();
 
-        public readonly ClippedSelectableCombo<IGatherable> GatherableSelector =
+        public readonly CnClippedSelectableCombo<IGatherable> GatherableSelector =
             new("AllGatherables", string.Empty, 250, AllGatherables, g => g.Name[GatherBuddy.Language]);
 
         public readonly GatherGroupSelector Selector;

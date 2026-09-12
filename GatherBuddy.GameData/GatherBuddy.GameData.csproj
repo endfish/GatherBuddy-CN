@@ -11,6 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Localization\zh-CN.json" LogicalName="GatherBuddy.Localization.zh-CN.json" />
     <ProjectReference Include="..\GatherBuddy.Levenshtein\GatherBuddy.Levenshtein.csproj" />
     <ProjectReference Include="..\OtterGui\OtterGui.csproj" />
   </ItemGroup>

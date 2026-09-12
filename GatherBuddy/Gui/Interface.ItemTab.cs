@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Dalamud.Bindings.ImGui;
@@ -71,7 +71,7 @@ public partial class Interface
         private static readonly ItemIdColumn      _itemIdColumn      = new() { Label = "Item Id" };
         private static readonly GatheringIdColumn _gatheringIdColumn = new() { Label = "G. Id" };
 
-        private class ItemFilterColumn : ColumnFlags<ItemFilter, ExtendedGatherable>
+        private class ItemFilterColumn : CnColumnFlags<ItemFilter, ExtendedGatherable>
         {
             private ItemFilter[] FlagValues = Array.Empty<ItemFilter>();
             private string[]     FlagNames  = Array.Empty<string>();

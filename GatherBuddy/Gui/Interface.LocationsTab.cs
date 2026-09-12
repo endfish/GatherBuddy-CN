@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -73,7 +73,7 @@ public partial class Interface
             }
         }
 
-        private sealed class TypeColumn : ColumnFlags<JobFlags, ILocation>
+        private sealed class TypeColumn : CnColumnFlags<JobFlags, ILocation>
         {
             public TypeColumn()
             {
@@ -173,12 +173,12 @@ public partial class Interface
         private sealed class AetheryteColumn : ColumnString<ILocation>
         {
             private readonly List<Aetheryte>                   _aetherytes;
-            private readonly ClippedSelectableCombo<Aetheryte> _aetheryteCombo;
+            private readonly CnClippedSelectableCombo<Aetheryte> _aetheryteCombo;
 
             public AetheryteColumn()
             {
                 _aetherytes     = GatherBuddy.GameData.Aetherytes.Values.ToList();
-                _aetheryteCombo = new ClippedSelectableCombo<Aetheryte>("##aetheryte", string.Empty, 200, _aetherytes, a => a.Name);
+                _aetheryteCombo = new CnClippedSelectableCombo<Aetheryte>("##aetheryte", string.Empty, 200, _aetherytes, a => a.Name);
             }
 
             public override string ToName(ILocation location)
@@ -294,7 +294,7 @@ public partial class Interface
             Any  = 0x02,
         }
 
-        private sealed class MarkerColumn : ColumnFlags<MarkerFlags, ILocation>
+        private sealed class MarkerColumn : CnColumnFlags<MarkerFlags, ILocation>
         {
             public override int Compare(ILocation lhs, ILocation rhs)
             {

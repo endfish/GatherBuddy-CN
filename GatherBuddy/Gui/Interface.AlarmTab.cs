@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Numerics;
 using Dalamud.Bindings.ImGui;
@@ -42,14 +42,14 @@ public partial class Interface
 
     private class AlarmCache
     {
-        public sealed class TimedItemCombo : ClippedSelectableCombo<IGatherable>
+        public sealed class TimedItemCombo : CnClippedSelectableCombo<IGatherable>
         {
             public TimedItemCombo(string label)
                 : base("##TimedItem", label, 200, GatherBuddy.UptimeManager.TimedGatherables, i => i.Name[GatherBuddy.Language])
             { }
         }
 
-        public sealed class AlarmSelector : ItemSelector<AlarmGroup>
+        public sealed class AlarmSelector : CnItemSelector<AlarmGroup>
         {
             private readonly AlarmManager _manager;
 
