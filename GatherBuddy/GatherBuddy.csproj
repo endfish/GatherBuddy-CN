@@ -1,10 +1,10 @@
-﻿<Project Sdk="Dalamud.NET.Sdk/15.0.0">
+<Project Sdk="Dalamud.NET.Sdk/15.0.0">
   <PropertyGroup>
     <RootNamespace>GatherBuddy</RootNamespace>
     <AssemblyName>GatherBuddy</AssemblyName>
-    <Version>3.8.11.1</Version>
+    <Version>3.8.11.2</Version>
     <Company>SoftOtter</Company>
-    <Product>GatherBuddy</Product>
+    <Product>GatherBuddy-CN</Product>
     <Copyright>Copyright © 2025</Copyright>
     <WarningLevel>4</WarningLevel>
     <OutputPath>bin\$(Configuration)\</OutputPath>
@@ -13,6 +13,9 @@
   <ItemGroup>
     <ProjectReference Include="..\GatherBuddy.GameData\GatherBuddy.GameData.csproj" />
     <ProjectReference Include="..\OtterGui\OtterGui.csproj" />
+    <InternalsVisibleTo Include="GatherBuddy.CN.Tests" />
+    <AssemblyMetadata Include="UpstreamVersion" Value="3.8.11.1" />
+    <AssemblyMetadata Include="UpstreamCommit" Value="1e39592f55e57774f287bfcea87dbd651a5cf2d8" />
   </ItemGroup>
 
   <ItemGroup>

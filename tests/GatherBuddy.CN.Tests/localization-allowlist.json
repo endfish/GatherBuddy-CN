@@ -1,0 +1,175 @@
+{
+  "GatherBuddy/GatherBuddy.Commands.cs": {
+    "identify": "既有命令名、命令参数或调用格式，保持兼容。",
+    "gearchange": "既有命令名、命令参数或调用格式，保持兼容。",
+    "teleport": "既有命令名、命令参数或调用格式，保持兼容。",
+    "mapmarker": "既有命令名、命令参数或调用格式，保持兼容。",
+    "information": "既有命令名、命令参数或调用格式，保持兼容。",
+    "waymarks": "既有命令名、命令参数或调用格式，保持兼容。",
+    "/gatherbuddy {0}": "既有命令名、命令参数或调用格式，保持兼容。",
+    "/gatherbuddy": "既有命令名、命令参数或调用格式，保持兼容。",
+    "/gather": "既有命令名、命令参数或调用格式，保持兼容。",
+    "/gatherbtn": "既有命令名、命令参数或调用格式，保持兼容。",
+    "/gathermin": "既有命令名、命令参数或调用格式，保持兼容。",
+    "/gatherfish": "既有命令名、命令参数或调用格式，保持兼容。",
+    "/gathergroup": "既有命令名、命令参数或调用格式，保持兼容。",
+    "/gbc": "既有命令名、命令参数或调用格式，保持兼容。",
+    "/gatherdebug": "既有命令名、命令参数或调用格式，保持兼容。",
+    "        window": "既有命令参数或示例格式，保持兼容。",
+    "        alarm": "既有命令参数或示例格式，保持兼容。",
+    "        spear": "既有命令参数或示例格式，保持兼容。",
+    "        fish": "既有命令参数或示例格式，保持兼容。",
+    "        edit": "既有命令参数或示例格式，保持兼容。",
+    "        unlock": "既有命令参数或示例格式，保持兼容。"
+  },
+  "GatherBuddy/GatherBuddy.cs": {
+    "GatherBuddy": "程序集／配置身份或插件品牌及版本格式。",
+    "fish_overrides.json": "配置、记录或内嵌资源的文件名。"
+  },
+  "GatherBuddy/Alarms/AlarmManager.cs": {
+    "alarms.json": "配置、记录或内嵌资源的文件名。"
+  },
+  "GatherBuddy/Config/Configuration.cs": {
+    "Botanist": "既有装备套装名称默认值，用于 /gearset change，不覆盖用户装备套装。",
+    "Miner": "既有装备套装名称默认值，用于 /gearset change，不覆盖用户装备套装。",
+    "Fisher": "既有装备套装名称默认值，用于 /gearset change，不覆盖用户装备套装。"
+  },
+  "GatherBuddy/CustomInfo/LocationManager.cs": {
+    "custom_locations.json": "配置、记录或内嵌资源的文件名。"
+  },
+  "GatherBuddy/FishTimer/FishRecorder.Files.cs": {
+    "fish_records.dat": "配置、记录或内嵌资源的文件名。",
+    "fish_records_*.dat": "配置、记录或内嵌资源的文件名。"
+  },
+  "GatherBuddy/FishTimer/FishTimerWindow.cs": {
+    "FishingTimer": "ImGui 窗口、表格、弹窗或拖放的内部标识。"
+  },
+  "GatherBuddy/FishTimer/FishTimerWindow.FishCache.cs": {
+    "QuadHookIcon.bmp": "配置、记录或内嵌资源的文件名。"
+  },
+  "GatherBuddy/GatherGroup/DefaultGroups.cs": {
+    "darkmatter": "既有预设标识，可作为 /gathergroup 参数；中文说明单独本地化。",
+    "100purple": "既有预设标识，可作为 /gathergroup 参数；中文说明单独本地化。",
+    "100orange": "既有预设标识，可作为 /gathergroup 参数；中文说明单独本地化。",
+    "90sand": "既有预设标识，可作为 /gathergroup 参数；中文说明单独本地化。"
+  },
+  "GatherBuddy/GatherGroup/GatherGroupManager.cs": {
+    "gather_groups.json": "配置、记录或内嵌资源的文件名。",
+    "/gathergroup ": "既有命令参数或示例格式，保持兼容。"
+  },
+  "GatherBuddy/GatherHelper/GatherWindow.Ui.cs": {
+    "GatherHelper": "ImGui 窗口、表格、弹窗或拖放的内部标识。",
+    "next": "既有命令名、命令参数或调用格式，保持兼容。"
+  },
+  "GatherBuddy/GatherHelper/GatherWindowManager.cs": {
+    "gather_window.json": "配置、记录或内嵌资源的文件名。"
+  },
+  "GatherBuddy/Gui/Interface.ConfigTab.cs": {
+    "%i%%": "数字或日期格式字符串；实际显示使用中文区域设置。"
+  },
+  "GatherBuddy/Gui/Interface.ContextMenus.cs": {
+    "en": "外部站点或 Teamcraft 协议的 URL、路径及语言代码。",
+    "de": "外部站点或 Teamcraft 协议的 URL、路径及语言代码。",
+    "fr": "外部站点或 Teamcraft 协议的 URL、路径及语言代码。",
+    "ja": "外部站点或 Teamcraft 协议的 URL、路径及语言代码。",
+    "db/{0}/{1}/{2}": "外部站点或 Teamcraft 协议的 URL、路径及语言代码。",
+    "spearfishing-spot": "外部站点或 Teamcraft 协议的 URL、路径及语言代码。",
+    "fishing-spot": "外部站点或 Teamcraft 协议的 URL、路径及语言代码。",
+    "https://www.garlandtools.org/db/#item/{0}": "外部站点或 Teamcraft 协议的 URL、路径及语言代码。",
+    "https://ffxivteamcraft.com/{0}": "外部站点或 Teamcraft 协议的 URL、路径及语言代码。",
+    "http://localhost:14500/{0}": "外部站点或 Teamcraft 协议的 URL、路径及语言代码。",
+    "ffxiv-teamcraft": "外部站点或 Teamcraft 协议的 URL、路径及语言代码。",
+    "teamcraft:///{0}": "外部站点或 Teamcraft 协议的 URL、路径及语言代码。"
+  },
+  "GatherBuddy/Gui/Interface.cs": {
+    "GatherBuddy-CN": "程序集／配置身份或插件品牌及版本格式。",
+    "{0} v{1}###GatherBuddyMain": "程序集／配置身份或插件品牌及版本格式。"
+  },
+  "GatherBuddy/Gui/Interface.DebugTab.cs": {
+    "X": "十六进制格式或通用接口缩写。",
+    "IPC": "十六进制格式或通用接口缩写。"
+  },
+  "GatherBuddy/Gui/Interface.FishTab.ExtendedFish.cs": {
+    "F1": "数字或日期格式字符串；实际显示使用中文区域设置。"
+  },
+  "GatherBuddy/Gui/Interface.GatherGroupTab.cs": {
+    "AllGatherables": "ImGui 窗口、表格、弹窗或拖放的内部标识。",
+    "%02d": "数字或日期格式字符串；实际显示使用中文区域设置。"
+  },
+  "GatherBuddy/Gui/Interface.Header.cs": {
+    "itemAlarm": "ImGui 窗口、表格、弹窗或拖放的内部标识。",
+    "fishAlarm": "ImGui 窗口、表格、弹窗或拖放的内部标识。",
+    "alarm": "ImGui 窗口、表格、弹窗或拖放的内部标识。"
+  },
+  "GatherBuddy/Gui/Interface.ItemTab.cs": {
+    "ItemTable": "ImGui 窗口、表格、弹窗或拖放的内部标识。"
+  },
+  "GatherBuddy/Gui/Interface.LocationsTab.cs": {
+    "%.2f": "数字或日期格式字符串；实际显示使用中文区域设置。"
+  },
+  "GatherBuddy/Gui/Interface.RecordTab.cs": {
+    "FileNamePopup": "ImGui 窗口、表格、弹窗或拖放的内部标识。",
+    "X8": "数字或日期格式字符串；实际显示使用中文区域设置。",
+    "g": "数字或日期格式字符串；实际显示使用中文区域设置。",
+    "Fish Records": "OtterGui 表格持久化标识；页签及表头另行汉化。"
+  },
+  "GatherBuddy/Gui/Interface.StatsPage.cs": {
+    "FishingSpotSelector": "ImGui 窗口、表格、弹窗或拖放的内部标识。"
+  },
+  "GatherBuddy/Gui/Interface.WeatherTab.cs": {
+    "WeatherTable": "ImGui 窗口、表格、弹窗或拖放的内部标识。"
+  },
+  "GatherBuddy/Gui/UiHelpers.cs": {
+    "yyyy-MM-dd (ddd)": "数字或日期格式字符串；实际显示使用中文区域设置。",
+    "HH:mm": "数字或日期格式字符串；实际显示使用中文区域设置。",
+    ".json.bak": "配置、记录或内嵌资源的文件名。"
+  },
+  "GatherBuddy/Plugin/Executor.cs": {
+    "/gearset change \"{0}\"": "既有命令名、命令参数或调用格式，保持兼容。"
+  },
+  "GatherBuddy/Plugin/Functions.cs": {
+    "on": "兼容既有布尔命令参数。",
+    "true": "兼容既有布尔命令参数。",
+    "off": "兼容既有布尔命令参数。",
+    "false": "兼容既有布尔命令参数。"
+  },
+  "GatherBuddy/Plugin/GatherBuddyIpc.cs": {
+    "{0}.Initialized": "公开 IPC 通道标识，保留拼写和 GatherBuddy 身份。",
+    "{0}.Disposed": "公开 IPC 通道标识，保留拼写和 GatherBuddy 身份。",
+    "{0}.Version": "公开 IPC 通道标识，保留拼写和 GatherBuddy 身份。",
+    "{0}.Version.V2": "公开 IPC 通道标识，保留拼写和 GatherBuddy 身份。",
+    "{0}.Identify": "公开 IPC 通道标识，保留拼写和 GatherBuddy 身份。",
+    "{0}.DrawFishToolitp": "公开 IPC 通道标识，保留拼写和 GatherBuddy 身份。",
+    "{0}.RecordCreated": "公开 IPC 通道标识，保留拼写和 GatherBuddy 身份。",
+    "{0}.QueryUptimes": "公开 IPC 通道标识，保留拼写和 GatherBuddy 身份。"
+  },
+  "GatherBuddy/SeFunctions/SeTugType.cs": {
+    "48 8D 35 ?? ?? ?? ?? 4C 8B CE": "游戏函数签名。"
+  },
+  "GatherBuddy/Spearfishing/SpearfishingHelper.Ui.cs": {
+    "SpearFishing": "游戏 Addon 名称。"
+  },
+  "GatherBuddy/Weather/WeatherManager.Computation.cs": {
+    "Call error, target weather rate above 100.": "仅供日志记录的底层异常，不作为界面提示。"
+  },
+  "GatherBuddy/Gui/CnWidgets/ItemSelector.cs": {
+    "{0}DragDrop": "ImGui 窗口、表格、弹窗或拖放的内部标识。",
+    "{0}Move": "ImGui 窗口、表格、弹窗或拖放的内部标识。"
+  },
+  "GatherBuddy.GameData/GameData.cs": {
+    "Could not fetch any aetherytes, this is certainly an error, terminating.": "仅供日志记录的底层异常，不作为界面提示。",
+    "Could not fetch any gatherables, this is certainly an error, terminating.": "仅供日志记录的底层异常，不作为界面提示。",
+    "Could not fetch any gathering nodes, this is certainly an error, terminating.": "仅供日志记录的底层异常，不作为界面提示。",
+    "Could not fetch any bait, this is certainly an error, terminating.": "仅供日志记录的底层异常，不作为界面提示。",
+    "Could not fetch any fish, this is certainly an error, terminating.": "仅供日志记录的底层异常，不作为界面提示。",
+    "Could not fetch any fishing spots, this is certainly an error, terminating.": "仅供日志记录的底层异常，不作为界面提示。",
+    "Invalid fishing spot!": "仅供日志记录的底层异常，不作为界面提示。"
+  },
+  "GatherBuddy/Plugin/Communicator.cs": {
+    "alarm": "既有命令参数或示例格式，保持兼容。",
+    "next": "既有命令参数或示例格式，保持兼容。"
+  },
+  "GatherBuddy/Spearfishing/SpearfishingHelper.cs": {
+    "SpearfishingHelper": "Dalamud 窗口命名空间，保留配置身份。"
+  }
+}

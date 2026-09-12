@@ -7,13 +7,14 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="../../GatherBuddy.GameData/GatherBuddy.GameData.csproj" />
+    <ProjectReference Include="../../GatherBuddy/GatherBuddy.csproj" />
     <Reference Include="Dalamud"><HintPath>$(DALAMUD_HOME)/Dalamud.dll</HintPath></Reference>
     <Reference Include="Lumina"><HintPath>$(DALAMUD_HOME)/Lumina.dll</HintPath></Reference>
     <Reference Include="Lumina.Excel"><HintPath>$(DALAMUD_HOME)/Lumina.Excel.dll</HintPath></Reference>
     <Reference Include="Serilog"><HintPath>$(DALAMUD_HOME)/Serilog.dll</HintPath></Reference>
     <Reference Include="Newtonsoft.Json"><HintPath>$(DALAMUD_HOME)/Newtonsoft.Json.dll</HintPath></Reference>
     <Reference Include="Dalamud.Bindings.ImGui"><HintPath>$(DALAMUD_HOME)/Dalamud.Bindings.ImGui.dll</HintPath></Reference>
-    <Compile Include="../../GatherBuddy/FishTimer/Parser/ChineseFishingMessages.cs" Link="ChineseFishingMessages.cs" />
+    <Reference Include="Microsoft.CodeAnalysis"><HintPath>$(MSBuildSDKsPath)/../Roslyn/bincore/Microsoft.CodeAnalysis.dll</HintPath></Reference>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp"><HintPath>$(MSBuildSDKsPath)/../Roslyn/bincore/Microsoft.CodeAnalysis.CSharp.dll</HintPath></Reference>
   </ItemGroup>
 </Project>

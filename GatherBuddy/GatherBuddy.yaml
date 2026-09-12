@@ -1,15 +1,16 @@
-name: GatherBuddy
-author: Ottermandias
+name: GatherBuddy-CN
+author: Ottermandias / Endfish（中文维护）
 description: |-
-  Adds commands to simplify gathering by finding nodes and fish and their locations
-  via item name and a UI to keep track of special uptime and weather conditions.
-punchline: Simplify Gathering and Fishing.
-repo_url: https://github.com/Ottermandias/GatherBuddy
+  查询采集物、鱼类、鱼饵和地点，追踪采集时间、天气与闹钟，管理采集分组、钓鱼记录及统计。
+  提供简体中文界面与国服适配，由 Endfish 独立维护并持续同步 Ottermandias/GatherBuddy。
+  保留 GatherBuddy 配置和 IPC 身份，不能与原版同时启用。
+punchline: 采集、钓鱼、天气与闹钟的中文助手。
+repo_url: https://github.com/endfish/GatherBuddy-CN
 tags:
-  - Gathering
-  - Fishing
-  - Miner
-  - Botanist
-  - Weather
-  - Alarms
-  - Timer
+  - 采集
+  - 钓鱼
+  - 采矿
+  - 园艺
+  - 天气
+  - 闹钟
+  - 计时
